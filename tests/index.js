@@ -55,12 +55,12 @@ describe('Rules', () => {
     it('passes for number larger than parameter', () => {
       assert.doesNotThrow(() => {
         validate({ argument: 99 }, { argument: 'min:7' })
-      }, ValidationError)
+      })
     })
     it('passes for number equal to parameter', () => {
       assert.doesNotThrow(() => {
         validate({ argument: 7 }, { argument: 'min:7' })
-      }, ValidationError)
+      })
     })
     it('throws error for string shorter than parameter', () => {
       assert.throws(() => {
@@ -70,27 +70,27 @@ describe('Rules', () => {
     it('passes for string longer than parameter', () => {
       assert.doesNotThrow(() => {
         validate({ argument: 'hello' }, { argument: 'min:3' })
-      }, ValidationError)
+      })
     })
     it('passes for string length equal to parameter', () => {
       assert.doesNotThrow(() => {
         validate({ argument: 'hello' }, { argument: 'min:5' })
-      }, ValidationError)
+      })
     })
     it('throws error for array length smaller than parameter', () => {
       assert.throws(() => {
         validate({ argument: ['hello', 'world'] }, { argument: 'min:3' })
-      }, ValidationError)
+      })
     })
     it('passes for array length larger than parameter', () => {
       assert.doesNotThrow(() => {
         validate({ argument: ['hello', 'world'] }, { argument: 'min:1' })
-      }, ValidationError)
+      })
     })
     it('passes for array length equal to parameter', () => {
       assert.doesNotThrow(() => {
         validate({ argument: ['hello', 'world'] }, { argument: 'min:2' })
-      }, ValidationError)
+      })
     })
   })
 })

@@ -1,5 +1,5 @@
 import is from 'is_js'
-import { ucfirst } from './helpers'
+import { ucfirst, coerce } from './helpers'
 
 export default class Validator {
   constructor(data, rules = {}, messages = {}) {
@@ -69,12 +69,6 @@ export default class Validator {
     }
   }
 
-  coerce(value) {
-    return is.number(Number(value)) ? Number(value) :
-           value === 'true' ? true :
-           value === 'false' ? false : value
-  }
-
   parseRule(rule) {
     let parameters = []
 
@@ -85,7 +79,7 @@ export default class Validator {
 
     return {
       rule: ucfirst(rule),
-      parameters: parameters.map(this.coerce)
+      parameters: parameters.map(coerce)
     }
   }
 

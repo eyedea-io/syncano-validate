@@ -6,8 +6,8 @@
   "main": "src/index.js",
   "scripts": {
     "build": "babel src -d lib",
-    "dev": "mocha --watch --compilers js:babel-core/register tests",
-    "test": "xo && mocha --compilers js:babel-core/register tests"
+    "dev": "mocha --watch --compilers js:babel-register tests",
+    "test": "xo && mocha --compilers js:babel-register tests"
   },
   "xo": {
     "semicolon": false,

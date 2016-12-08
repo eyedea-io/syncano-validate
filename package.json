@@ -1,0 +1,51 @@
+{
+  "name": "syncano-validation",
+  "version": "1.0.0",
+  "description": "",
+  "license": "MIT",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "babel src -d lib",
+    "dev": "mocha --watch --compilers js:babel-core/register tests",
+    "test": "xo && mocha --compilers js:babel-core/register tests"
+  },
+  "xo": {
+    "semicolon": false,
+    "space": true,
+    "esnext": true,
+    "globals": [
+      "it",
+      "describe"
+    ],
+    "rules": {
+      "object-curly-spacing": 0,
+      "no-warning-comments": [
+        0,
+        {
+          "terms": [
+            "todo"
+          ]
+        }
+      ]
+    }
+  },
+  "babel": {
+    "presets": [
+      "latest"
+    ],
+    "plugins": [
+      "transform-class-properties"
+    ]
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-plugin-transform-class-properties": "^6.19.0",
+    "babel-preset-latest": "^6.16.0",
+    "babel-register": "^6.18.0",
+    "mocha": "^3.2.0",
+    "xo": "^0.17.1"
+  },
+  "dependencies": {
+    "is_js": "^0.9.0"
+  }
+}

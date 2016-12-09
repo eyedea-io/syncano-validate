@@ -49,17 +49,17 @@ describe('Rules', () => {
     })
     it('throws error for number smaller than parameter', () => {
       assert.throws(() => {
-        validate({ argument: 6 }, { argument: 'min:7' })
+        validate({ argument: 6 }, { argument: 'numeric|min:7' })
       }, ValidationError)
     })
     it('passes for number larger than parameter', () => {
       assert.doesNotThrow(() => {
-        validate({ argument: 99 }, { argument: 'min:7' })
+        validate({ argument: 99 }, { argument: 'numeric|min:7' })
       })
     })
     it('passes for number equal to parameter', () => {
       assert.doesNotThrow(() => {
-        validate({ argument: 7 }, { argument: 'min:7' })
+        validate({ argument: 7 }, { argument: 'numeric|min:7' })
       })
     })
     it('throws error for string shorter than parameter', () => {

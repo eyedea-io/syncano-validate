@@ -1,14 +1,26 @@
 import is from 'is_js'
+import snakeCase from 'lodash.snakecase'
+import camelCase from 'lodash.camelcase'
 
-export function ucfirst(str) {
+function upperFirst(str) {
   const firstLetter = str.substr(0, 1)
   return firstLetter.toUpperCase() + str.substr(1)
 }
 
-export function coerce(value) {
+function coerce(value) {
   return is.number(Number(value)) ? Number(value) :
          value === 'true' ? true :
          value === 'false' ? false : value
 }
 
-export default {}
+function studlyCase(str) {
+  return upperFirst(camelCase(str))
+}
+
+export {
+  snakeCase,
+  camelCase,
+  studlyCase,
+  upperFirst,
+  coerce
+}

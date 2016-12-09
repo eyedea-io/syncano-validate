@@ -2,7 +2,7 @@ const { validate } = require('../src')
 
 export default () => {
   const data = {
-    firstName: 'A',
+    firstName: '',
     lastName: 'Doe',
     age: 16,
     gender: 'male'
@@ -11,7 +11,7 @@ export default () => {
   const rules = {
     firstName: 'required|min:2',
     lastName: 'required|min:2',
-    age: 'required|min:18',
+    age: 'required|numeric|min:18',
     gender: 'in:male,female'
   }
 

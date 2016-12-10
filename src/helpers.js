@@ -22,5 +22,6 @@ export {
   camelCase,
   studlyCase,
   upperFirst,
-  coerce
+  coerce,
+  is
 }

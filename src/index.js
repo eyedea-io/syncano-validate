@@ -1,7 +1,6 @@
-import is from 'is_js'
 import * as replacers from './replacers'
 import * as validators from './validators'
-import { coerce, snakeCase, studlyCase } from './helpers'
+import { is, coerce, snakeCase, studlyCase } from './helpers'
 import MESSAGES from './messages'
 
 export default class Validator {

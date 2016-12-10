@@ -1,4 +1,4 @@
-import is from 'is_js'
+import { is } from './helpers'
 
 export function validateRequired(attribute, value) {
   return is.existy(value) && is.not.empty(value)

@@ -15,12 +15,10 @@ export default class Validator {
   }
 
   setRules(rules) {
-    this.rules = Object
-      .keys(rules)
-      .reduce((all, attr) => {
-        all[attr] = rules[attr].split('|')
-        return all
-      }, {})
+    this.rules = Object.keys(rules).reduce((all, attr) => ({
+      ...all,
+      [attr]: rules[attr].split('|')
+    }), {})
   }
 
   setData(data) {

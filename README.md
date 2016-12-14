@@ -45,7 +45,7 @@ const data = {
   }
 }
 
-validate(data)
+validator.validate(data)
   .then(() => {
     // All params valid! Continue code...
   })

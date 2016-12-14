@@ -1,7 +1,6 @@
 const assert = require('assert')
 const syncano = require('syncano')
 const Validator = require('../src').default
-const { apiKey, instanceName } = require('./config.json')
 
 let connection
 let validator
@@ -9,8 +8,8 @@ let validate
 
 beforeEach(() => {
   connection = syncano({
-    apiKey
-  }).setInstanceName(instanceName)
+    apiKey: process.env.SYNCANO_API_KEY
+  }).setInstanceName(process.env.SYNCANO_INSTANCE_NAME)
 
   validator = new Validator(connection)
   validate = validator.validate.bind(validator)

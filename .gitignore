@@ -8,6 +8,7 @@ node_modules
 
 # Build
 lib
+tests/config.json
 
 # Yarn Integrity file
 .yarn-integrity

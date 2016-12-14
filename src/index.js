@@ -4,71 +4,30 @@ import { is, coerce, snakeCase, studlyCase } from './helpers'
 import MESSAGES from './messages'
 
 export default class Validator {
-  constructor(data, rules = {}, messages = {}) {
-    this.messages = messages
-    this.setData(data)
-    this.setRules(rules)
+  constructor(connection) {
+    this.connection = connection
 
     this.numericRules = ['Numeric', 'Integer']
     this.sizeRules = ['Min', 'Max', 'Between']
   }
 
-  setRules(rules) {
-    this.rules = Object.keys(rules).reduce((all, attr) => ({
+  setData(data) {
+    // TODO: Handle array inputs
+    // Map attribute to value
+    this.data = Object.keys(data).reduce((all, attribute) => ({
       ...all,
-      [attr]: rules[attr].split('|')
+      [attribute]: data[attribute].value
+    }), {})
+
+    // Map attribute to array of rules
+    this.rules = Object.keys(data).reduce((all, attribute) => ({
+      ...all,
+      [attribute]: this.parseRules(data[attribute].validate)
     }), {})
   }
 
-  setData(data) {
-    // TODO: Handle array inputs
-    this.data = data
-  }
-
-  validate() {
-    if (this.fails()) {
-      // TODO: throw list of errors
-      throw new ValidationError('Validation failed.', this.errors)
-    }
-  }
-
-  fails() {
-    return !this.passes()
-  }
-
-  passes() {
-    this.errors = {}
-
-    Object.keys(this.rules).map(attribute =>
-      this.rules[attribute].forEach(rule => {
-        // Skip invalidated attributes
-        if (!{}.hasOwnProperty.call(this.errors, attribute)) {
-          this.validateAttribute(attribute, rule)
-        }
-      })
-    )
-
-    return Object.keys(this.errors).length === 0
-  }
-
-  errors() {
-    return this.errors
-  }
-
-  validateAttribute(attribute, stringRule) {
-    const { rule, parameters } = this.parseRule(stringRule)
-
-    if (rule === '') {
-      return
-    }
-
-    // TODO: Handle file input
-    const value = this.data[attribute]
-    const method = validators[`validate${rule}`]
-
-    if (method && !method.call(this, attribute, value, parameters)) {
-      this.addError(attribute, rule, parameters)
-    }
+  parseRules(rules) {
+    return rules.split('|').map(rule => this.parseRule(rule))
   }
 
   parseRule(rule) {
@@ -77,15 +36,87 @@ export default class Validator {
     if (rule.indexOf(':') >= 0) {
       parameters = rule.split(':')
       rule = parameters.shift()
+      parameters = parameters.join('').split(',').map(coerce)
     }
 
-    parameters = parameters.map(coerce)
+    rule = this.normalizeRule(rule)
 
-    rule = studlyCase(rule)
-    rule = rule === 'Int' ? 'Integer' :
-           rule === 'Bool' ? 'Boolean' : rule
+    this.validateRule(rule)
 
     return { rule, parameters }
+  }
+
+  validateRule(rule) {
+    if (validators[`validate${rule}`] === undefined) {
+      throw new ValidationError(`Invalid validation rule ${snakeCase(rule)}`)
+    }
+  }
+
+  normalizeRule(rule) {
+    rule = studlyCase(rule)
+
+    return rule === 'Int' ? 'Integer' :
+           rule === 'Bool' ? 'Boolean' : rule
+  }
+
+  validate(data) {
+    return new Promise((resolve, reject) => {
+      try {
+        this.setData(data)
+      } catch (err) {
+        reject(err)
+      }
+
+      Promise
+        .all(this.attributesPass())
+        .then(() => this.passes() ? resolve() : reject(this.errors))
+        .catch(err => reject(err))
+    })
+  }
+
+  passes() {
+    return Object.keys(this.errors).length === 0
+  }
+
+  attributesPass() {
+    this.errors = {}
+
+    const rulesToResolve = Object
+      .keys(this.rules)
+      .reduce((all, attribute) => {
+        this.rules[attribute].forEach(rule => {
+          // Skip invalidated attributes
+          if (!{}.hasOwnProperty.call(this.errors, attribute)) {
+            all.push(this.validateAttribute(attribute, rule))
+          }
+        })
+
+        return all
+      }, [])
+
+    return rulesToResolve
+  }
+
+  validateAttribute(attribute, { rule, parameters }) {
+    // TODO: Handle file input
+    const value = this.data[attribute]
+    const method = validators[`validate${rule}`]
+
+    if (method) {
+      const passed = method.call(this, attribute, value, parameters)
+
+      if (passed instanceof Promise) {
+        passed.then(result => {
+          if (result) {
+            this.addError(attribute, rule, parameters)
+          }
+        })
+      } else if (!passed) {
+        this.addError(attribute, rule, parameters)
+      }
+
+      return passed
+    }
   }
 
   addError(attribute, rule, parameters) {
@@ -120,9 +151,7 @@ export default class Validator {
       return false
     }
 
-    for (const value of this.rules[attribute]) {
-      const { rule, parameters } = this.parseRule(value)
-
+    for (const { rule, parameters } of this.rules[attribute]) {
       if (rules.indexOf(rule) >= 0) {
         return [rule, parameters]
       }
@@ -163,13 +192,20 @@ export default class Validator {
   }
 }
 
-export function ValidationError(message, errors) {
+function ValidationError(message, errors) {
   this.stack = (new Error()).stack
   this.name = 'ValidationError'
   this.message = message
   this.errors = errors
 }
 
-export function validate(data, rules) {
-  return (new Validator(data, rules)).validate()
+ValidationError.prototype = Error.prototype
+
+function validate(data, rules, messages) {
+  return (new Validator()).validate(data, rules, messages)
+}
+
+export {
+  ValidationError,
+  validate
 }

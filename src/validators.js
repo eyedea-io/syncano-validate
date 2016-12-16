@@ -40,3 +40,7 @@ export function validateNumeric(attribute, value) {
 export function validateArray(attribute, value) {
   return is.array(value)
 }
+
+export function validateIn(attribute, value, parameters = []) {
+  return parameters.indexOf(value) >= 0
+}

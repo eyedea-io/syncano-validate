@@ -184,4 +184,21 @@ describe('rule', () => {
       return validate(data).then(check).catch(check)
     })
   })
+
+  describe('#in', () => {
+    it('throws error when argument is not in parameters', () => {
+      const data = { framework: { validate: 'in:react,vue,angular', value: 'riot' } }
+      const check = err => assert.equal(err.framework,
+        'The selected framework is invalid.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+    it('passes when argument is in parameters', () => {
+      const data = { framework: { validate: 'in:react,vue,angular', value: 'vue' } }
+      const check = err => assert.equal(err.framework, undefined)
+
+      return validate(data).then(check).catch(check)
+    })
+  })
 })

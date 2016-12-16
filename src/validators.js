@@ -25,7 +25,7 @@ export function validateExists(attribute, value, parameters) {
       .filter({ [column]: { _eq: value } })
       .count()
       .then(response => {
-        resolve(response.objects_count === 0)
+        resolve(response.objects_count > 0)
       })
       .catch(err => {
         reject(err.message)

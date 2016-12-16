@@ -107,7 +107,7 @@ export default class Validator {
 
       if (passed instanceof Promise) {
         passed.then(result => {
-          if (result) {
+          if (!result) {
             this.addError(attribute, rule, parameters)
           }
         })

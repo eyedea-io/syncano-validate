@@ -11,3 +11,4 @@ lib
 
 # Yarn Integrity file
 .yarn-integrity
+.nyc_output

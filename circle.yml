@@ -2,4 +2,4 @@ deployment:
   reports:
     branch: /.*/
     commands:
-      - yarn run report-coverage
+      - npm run report-coverage

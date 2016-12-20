@@ -11,3 +11,6 @@ lib
 
 # Yarn Integrity file
 .yarn-integrity
+
+#codecov
+coverage

@@ -9,7 +9,6 @@
     "dev": "mocha --watch -R min --compilers js:babel-register tests",
     "test": "xo && mocha --compilers js:babel-register tests",
     "test:coverage": "nyc npm test && nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "report-coverage": "cat ./coverage/lcov.info | codecov"
   },
   "xo": {
     "semicolon": false,

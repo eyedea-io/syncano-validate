@@ -1,4 +1,5 @@
 [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)   [![CircleCI](https://circleci.com/gh/eyedea-io/syncano-server-js-validator/tree/master.svg?style=shield)](https://circleci.com/gh/eyedea-io/syncano-server-js-validator/tree/master)
+[![codecov](https://codecov.io/gh/eyedea-io/syncano-server-js-validator/branch/master/graph/badge.svg)](https://codecov.io/gh/eyedea-io/syncano-server-js-validator)
 
 # syncano-server-js-validator
 
@@ -12,8 +13,8 @@ import syncano from 'syncano'
 
 // Initialize syncano connection
 // It's needed for rules like: unique, exists... that depends on syncano
-const connection = syncano({ 
-  apiKey: '<SYNCANO_API_KEY>' 
+const connection = syncano({
+  apiKey: '<SYNCANO_API_KEY>'
 }).setInstanceName('<SYNCANO_INSTANCE_NAME')
 
 const validator = new Validator(connection)
@@ -52,4 +53,4 @@ validator.validate(data)
   .catch(errors => {
     // Handle response
   })
-``` 
+```

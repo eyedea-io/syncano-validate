@@ -11,3 +11,9 @@ lib
 
 # Yarn Integrity file
 .yarn-integrity
+
+#codecov
+coverage
+
+#coverage
+.nyc_output

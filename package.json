@@ -8,7 +8,7 @@
     "build": "babel src -d lib",
     "dev": "mocha --watch -R min --compilers js:babel-register tests",
     "test": "xo && mocha --compilers js:babel-register tests",
-    "check-coverage": "nyc npm test",
+    "test:coverage": "nyc npm test",
     "report-coverage": "cat ./coverage/lcov.info | codecov"
   },
   "xo": {

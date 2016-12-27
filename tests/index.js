@@ -30,6 +30,18 @@ describe('validate function', () => {
 
     return validate(data).catch(check)
   })
+
+  it('throws error for invalid connection', () => {
+    const invalidConnection = syncano({
+      apiKey: 'invalidApiKey'
+    }).setInstanceName('invalidInstanceName')
+    const invalidValidator = new Validator(invalidConnection)
+
+    const check = err => assert.equal(err.message, 'No such API Key.')
+
+    return invalidValidator.validateConnection()
+      .catch(check)
+  })
 })
 
 describe('rule', () => {

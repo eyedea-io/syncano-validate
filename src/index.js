@@ -11,6 +11,14 @@ export default class Validator {
     this.sizeRules = ['Min', 'Max', 'Between']
   }
 
+  validateConnection() {
+    return new Promise((resolve, reject) => {
+      this.connection.Instance.please().list()
+        .then(() => resolve(true))
+        .catch(err => reject(err))
+    })
+  }
+
   setData(data) {
     // TODO: Handle array inputs
     // Map attribute to value

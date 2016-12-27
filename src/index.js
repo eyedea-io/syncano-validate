@@ -78,7 +78,6 @@ export default class Validator {
       Promise
         .all(this.attributesPass())
         .then(() => this.passes() ? resolve() : reject(this.errors))
-        .catch(err => reject(err))
     })
   }
 

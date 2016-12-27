@@ -31,6 +31,12 @@ describe('validate function', () => {
     return validate(data).catch(check)
   })
 
+  it('passes for valid connection', () => {
+    const check = value => assert.ok(value)
+
+    return validator.validateConnection().then(check).catch(check)
+  })
+
   it('throws error for invalid connection', () => {
     const invalidConnection = syncano({
       apiKey: 'invalidApiKey'

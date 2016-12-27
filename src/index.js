@@ -147,10 +147,6 @@ export default class Validator {
   }
 
   getRule(attribute, rules) {
-    if (!{}.hasOwnProperty.call(this.rules, attribute)) {
-      return false
-    }
-
     for (const { rule, parameters } of this.rules[attribute]) {
       if (rules.indexOf(rule) >= 0) {
         return [rule, parameters]

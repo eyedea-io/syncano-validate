@@ -156,6 +156,98 @@ describe('rule', () => {
   })
 
   /*
+   * MAX
+   * ----------------------------------------------------- */
+  describe('max', () => {
+    it('throws error without parameter', () => {
+      const data = { attributeName: { validate: 'max' } }
+      const check = err => assert.equal(err.message,
+        'Validation rule max requires at least 1 parameters.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('throws error when parameter is not a number', () => {
+      const data = { attributeName: { validate: 'max:notNumber' } }
+      const check = err => assert.equal(err.message,
+        'Validation rule max requires number parameter.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('throws error for number greater than parameter', () => {
+      const data = { attributeName: { validate: 'max:7|numeric', value: 8 } }
+      const check = err => assert.equal(err.attributeName,
+        'The attribute name may not be greater than 7.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('passes for number smaller than parameter', () => {
+      const data = { attributeName: { validate: 'max:7|numeric', value: 5 } }
+      const check = err => assert.equal(err.attributeName, undefined)
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('passes for number equal to parameter', () => {
+      const data = { attributeName: { validate: 'max:7|numeric', value: 7 } }
+      const check = err => assert.equal(err.attributeName, undefined)
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('throws error for string longer than parameter', () => {
+      const data = { attributeName: { validate: 'max:7', value: 'hello world' } }
+      const check = err => assert.equal(err.attributeName,
+        'The attribute name may not be greater than 7 characters.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('passes for string shorter than parameter', () => {
+      const data = { attributeName: { validate: 'max:7', value: 'hello' } }
+      const check = err => assert.equal(err.attributeName, undefined)
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('passes for string length equal to parameter', () => {
+      const data = { attributeName: { validate: 'max:5', value: 'hello' } }
+      const check = err => assert.equal(err.attributeName, undefined)
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('throws error for array length greater than parameter', () => {
+      const data = { attributeName: { validate: 'max:3|array', value: ['hello', 'world', 'or', 'nope'] } }
+      const check = err => assert.equal(err.attributeName,
+        'The attribute name may not have more than 3 items.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('passes for array length smaller than parameter', () => {
+      const data = { attributeName: { validate: 'max:3|array', value: ['hello', 'world'] } }
+      const check = err => assert.equal(err.attributeName, undefined)
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('passes for array length equal to parameter', () => {
+      const data = { attributeName: { validate: 'max:2|array', value: ['hello', 'world'] } }
+      const check = err => assert.equal(err.attributeName, undefined)
+
+      return validate(data).then(check).catch(check)
+    })
+  })
+
+  /*
    * EXISTS
    * ----------------------------------------------------- */
   describe('exists', () => {

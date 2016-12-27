@@ -14,6 +14,16 @@ export function validateMin(attribute, value, parameters) {
   return this.getSize(attribute, value) >= parameters[0]
 }
 
+export function validateMax(attribute, value, parameters) {
+  this.requireParameterCount(1, parameters, 'max')
+
+  if (is.not.number(parameters[0])) {
+    throw new Error('Validation rule max requires number parameter.')
+  }
+
+  return this.getSize(attribute, value) <= parameters[0]
+}
+
 export function validateExists(attribute, value, parameters) {
   this.requireParameterCount(2, parameters, 'exists')
 

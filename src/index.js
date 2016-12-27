@@ -201,11 +201,6 @@ function ValidationError(message, errors) {
 
 ValidationError.prototype = Error.prototype
 
-function validate(data, rules, messages) {
-  return (new Validator()).validate(data, rules, messages)
-}
-
 export {
-  ValidationError,
-  validate
+  ValidationError
 }

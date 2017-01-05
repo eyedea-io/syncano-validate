@@ -311,4 +311,36 @@ describe('rule', () => {
       return validate(data).then(check).catch(check)
     })
   })
+
+  /*
+   * BOOLEAN
+   * ----------------------------------------------------- */
+  describe('boolean', () => {
+    it('throws error when argument is not true or false', () => {
+      const data = { tested: { validate: 'boolean', value: '2' } }
+      const check = err => assert.equal(err.tested,
+        'The tested field must be true or false.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+    it('passes when argument is true', () => {
+      const data = { tested: { validate: 'boolean', value: true } }
+      const check = err => assert.equal(err.tested, undefined)
+
+      return validate(data).then(check).catch(check)
+    })
+    it('passes when argument is 0', () => {
+      const data = { tested: { validate: 'boolean', value: 0 } }
+      const check = err => assert.equal(err.tested, undefined)
+
+      return validate(data).then(check).catch(check)
+    })
+    it('passes when argument is \'1\'', () => {
+      const data = { tested: { validate: 'boolean', value: '1' } }
+      const check = err => assert.equal(err.tested, undefined)
+
+      return validate(data).then(check).catch(check)
+    })
+  })
 })

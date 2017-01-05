@@ -54,3 +54,9 @@ export function validateArray(attribute, value) {
 export function validateIn(attribute, value, parameters = []) {
   return parameters.indexOf(value) >= 0
 }
+
+export function validateBoolean(attribute, value) {
+  const acceptable = [true, false, 0, 1, '0', '1']
+
+  return acceptable.indexOf(value) >= 0
+}

@@ -3,6 +3,44 @@
 
 # syncano-server-js-validator
 
+## TODO:
+
+Accepted
+After (Date)
+Alpha
+Alpha Dash
+Alpha Numeric
+Before (Date)
+Between
+Boolean
+Confirmed
+Date
+Date Format
+Different
+Digits
+Digits Between
+Dimensions (Image Files)
+E-Mail
+File
+Filled
+Image (File)
+In Array
+Integer
+IP Address
+JSON
+MIME Types
+MIME Type By File Extension
+Nullable
+Not In
+Present
+Regular Expression
+Same
+Size
+String
+Timezone
+Unique (Database)
+URL
+
 ## Usage
 
 ### Basic

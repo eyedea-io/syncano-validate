@@ -38,7 +38,6 @@
 * String
 * Timezone
 * Unique (Database)
-* URL
 
 ## Usage
 

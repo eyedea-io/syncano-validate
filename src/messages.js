@@ -12,5 +12,6 @@ export default {
   },
   exists: 'The selected :attribute is invalid.',
   in: 'The selected :attribute is invalid.',
+  url: 'The :attribute format is invalid.',
   digits: 'The :attribute must be :digits digits.'
 }

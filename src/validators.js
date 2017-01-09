@@ -54,3 +54,9 @@ export function validateArray(attribute, value) {
 export function validateIn(attribute, value, parameters = []) {
   return parameters.indexOf(value) >= 0
 }
+
+export function validateDigits(attribute, value, parameters) {
+  this.requireParameterCount(1, parameters, 'digits')
+  const matchNumbers = new RegExp('/[^0-9]/')
+  return !matchNumbers.test(value) && (value.toString()).length === parameters[0]
+}

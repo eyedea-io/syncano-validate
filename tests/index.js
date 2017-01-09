@@ -311,4 +311,20 @@ describe('rule', () => {
       return validate(data).then(check).catch(check)
     })
   })
+  describe('#digits', () => {
+    it('throws error when an attribute is not given exact number of digits', () => {
+      const data = { number: { validate: 'digits:8', value: 123 } }
+      const check = err => assert.equal(err.number,
+        'The number must be 8 digits.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+    it('passes when number is ', () => {
+      const data = { number: { validate: 'digits:3', value: 133 } }
+      const check = err => assert.equal(err.number, undefined)
+
+      return validate(data).then(check).catch(check)
+    })
+  })
 })

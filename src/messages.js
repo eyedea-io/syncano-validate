@@ -11,5 +11,6 @@ export default {
     array: 'The :attribute must have at least :min items.'
   },
   exists: 'The selected :attribute is invalid.',
-  in: 'The selected :attribute is invalid.'
+  in: 'The selected :attribute is invalid.',
+  digits: 'The :attribute must be :digits digits.'
 }

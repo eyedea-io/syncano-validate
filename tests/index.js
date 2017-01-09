@@ -318,7 +318,7 @@ describe('rule', () => {
     it('throws error when url is invalid', () => {
       const data = { url: { validate: 'url', value: 'htt:/google.com' } }
       const check = err => assert.equal(err.url,
-       'The url format is invalid'
+       'The url format is invalid.'
      )
       return validate(data).then(check).catch(check)
     })

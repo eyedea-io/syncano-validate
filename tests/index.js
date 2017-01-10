@@ -345,4 +345,21 @@ describe('rule', () => {
       return validate(data).then(check).catch(check)
     })
   })
+  /*
+   * URL
+   * ----------------------------------------------------- */
+  describe('url', () => {
+    it('throws error when url is invalid', () => {
+      const data = { url: { validate: 'url', value: 'htt:/google.com' } }
+      const check = err => assert.equal(err.url,
+       'The url format is invalid.'
+     )
+      return validate(data).then(check).catch(check)
+    })
+    it('passes when url is valid', () => {
+      const data = { url: { validate: 'url', value: 'https://github.com' } }
+      const check = err => assert.equal(err.url, undefined)
+      return validate(data).then(check).catch(check)
+    })
+  })
 })

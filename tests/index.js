@@ -311,6 +311,7 @@ describe('rule', () => {
       return validate(data).then(check).catch(check)
     })
   })
+
   /*
    * URL
    * ----------------------------------------------------- */
@@ -322,12 +323,14 @@ describe('rule', () => {
      )
       return validate(data).then(check).catch(check)
     })
+
     it('passes when url is valid', () => {
       const data = { url: { validate: 'url', value: 'https://github.com' } }
       const check = err => assert.equal(err.url, undefined)
       return validate(data).then(check).catch(check)
     })
   })
+
   /*
    * DIGITS
    * ----------------------------------------------------- */
@@ -340,6 +343,7 @@ describe('rule', () => {
 
       return validate(data).then(check).catch(check)
     })
+
     it('passes when number is ', () => {
       const data = { number: { validate: 'digits:3', value: 133 } }
       const check = err => assert.equal(err.number, undefined)

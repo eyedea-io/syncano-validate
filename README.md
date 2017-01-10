@@ -12,7 +12,6 @@
 * Alpha Numeric
 * Before (Date)
 * Between
-* Boolean
 * Confirmed
 * Date
 * Date Format

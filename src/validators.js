@@ -66,3 +66,9 @@ export function validateUrl(attribute, value) {
 
   return regex.test(value)
 }
+
+export function validateDigits(attribute, value, parameters) {
+  this.requireParameterCount(1, parameters, 'digits')
+  const matchNumbers = new RegExp('/[^0-9]/')
+  return !matchNumbers.test(value) && (value.toString()).length === parameters[0]
+}

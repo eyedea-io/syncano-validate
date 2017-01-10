@@ -17,7 +17,6 @@
 * Date
 * Date Format
 * Different
-* Digits
 * Digits Between
 * Dimensions (Image Files)
 * E-Mail

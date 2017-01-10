@@ -72,3 +72,10 @@ export function validateDigits(attribute, value, parameters) {
   const matchNumbers = new RegExp('/[^0-9]/')
   return !matchNumbers.test(value) && (value.toString()).length === parameters[0]
 }
+
+export function validateDigitsBetween(attribute, value, parameters) {
+  this.requireParameterCount(2, parameters, 'digitsBetween')
+  const length = (value.toString()).length
+  const matchNumbers = new RegExp('/[^0-9]/')
+  return !matchNumbers.test(value) && length >= parameters[0] && length <= parameters[1]
+}

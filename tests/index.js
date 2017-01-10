@@ -384,4 +384,24 @@ describe('rule', () => {
       return validate(data).then(check).catch(check)
     })
   })
+
+  /*
+   * DIGITS BETWEEN
+   * ----------------------------------------------------- */
+  describe('#digits_between', () => {
+    it('throws error when an attribute is not between min and max', () => {
+      const data = { number: { validate: 'digits_between:2,4', value: 3 } }
+      const check = err => assert.equal(err.number,
+        'The number must be between 2 and 4 digits.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('passes when number is between min and max ', () => {
+      const data = { number: { validate: 'digits_between:2,4', value: 32 } }
+      const check = err => assert.equal(err.number, undefined)
+      return validate(data).then(check).catch(check)
+    })
+  })
 })

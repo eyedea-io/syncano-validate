@@ -14,5 +14,6 @@ export default {
   in: 'The selected :attribute is invalid.',
   boolean: 'The :attribute field must be true or false.',
   url: 'The :attribute format is invalid.',
-  digits: 'The :attribute must be :digits digits.'
+  digits: 'The :attribute must be :digits digits.',
+  digits_between: 'The :attribute must be between :min and :max digits.'
 }

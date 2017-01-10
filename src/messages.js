@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 export default {
   required: 'The :attribute field is required.',
   max: {

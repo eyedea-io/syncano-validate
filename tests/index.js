@@ -1,6 +1,8 @@
-const assert = require('assert')
+const chai = require('chai')
 const syncano = require('syncano')
 const Validator = require('../src').default
+
+const { assert } = chai
 
 let connection
 let validator
@@ -326,19 +328,19 @@ describe('rule', () => {
     })
     it('passes when argument is true', () => {
       const data = { tested: { validate: 'boolean', value: true } }
-      const check = err => assert.equal(err.tested, undefined)
+      const check = err => assert.isUndefined(err.tested)
 
       return validate(data).then(check).catch(check)
     })
     it('passes when argument is 0', () => {
       const data = { tested: { validate: 'boolean', value: 0 } }
-      const check = err => assert.equal(err.tested, undefined)
+      const check = err => assert.isUndefined(err.tested)
 
       return validate(data).then(check).catch(check)
     })
     it('passes when argument is \'1\'', () => {
       const data = { tested: { validate: 'boolean', value: '1' } }
-      const check = err => assert.equal(err.tested, undefined)
+      const check = err => assert.isUndefined(err.tested)
 
       return validate(data).then(check).catch(check)
     })

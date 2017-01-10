@@ -72,3 +72,7 @@ export function validateDigits(attribute, value, parameters) {
   const matchNumbers = new RegExp('/[^0-9]/')
   return !matchNumbers.test(value) && (value.toString()).length === parameters[0]
 }
+
+export function validateInteger(attribute, value) {
+  return value === parseInt(value, 10)
+}

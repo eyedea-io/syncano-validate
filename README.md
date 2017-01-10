@@ -23,7 +23,6 @@
 * Filled
 * Image (File)
 * In Array
-* Integer
 * IP Address
 * JSON
 * MIME Types

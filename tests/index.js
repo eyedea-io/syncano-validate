@@ -586,4 +586,64 @@ describe('rule', () => {
       return validate(data).then(check).catch(check)
     })
   })
+
+  /*
+   * ALPHA NUMERIC
+   * ----------------------------------------------------- */
+  describe('#alpha_num', () => {
+    it('throws error when an attribute does not contains only letters or numbers', () => {
+      const data = { text: { validate: 'alpha_num', value: 'test-123' } }
+      const check = err => assert.equal(err.text,
+        'The text may only contain letters and numbers.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('throws error when an attribute is not a string', () => {
+      const data = { text: { validate: 'alpha_num', value: true } }
+      const check = err => assert.equal(err.text,
+        'The text may only contain letters and numbers.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('throws error when an attribute has space in text', () => {
+      const data = { text: { validate: 'alpha_num', value: 'test 123' } }
+      const check = err => assert.equal(err.text,
+        'The text may only contain letters and numbers.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('passes when attribute contains only letters ', () => {
+      const data = { text: { validate: 'alpha_num', value: 'tEsT' } }
+      const check = err => assert.isUndefined(err.text)
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('passes when attribute contains only numbers as a string', () => {
+      const data = { text: { validate: 'alpha_num', value: '123' } }
+      const check = err => assert.isUndefined(err.text)
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('passes when attribute contains only numbers ', () => {
+      const data = { text: { validate: 'alpha_num', value: 123 } }
+      const check = err => assert.isUndefined(err.text)
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('passes when attribute contains letters and numbers ', () => {
+      const data = { text: { validate: 'alpha_num', value: 'test123' } }
+      const check = err => assert.isUndefined(err.text)
+
+      return validate(data).then(check).catch(check)
+    })
+  })
 })

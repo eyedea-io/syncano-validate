@@ -18,5 +18,6 @@ export default {
   digits: 'The :attribute must be :digits digits.',
   digits_between: 'The :attribute must be between :min and :max digits.',
   integer: 'The :attribute must be an integer.',
-  accepted: 'The :attribute must be accepted.'
+  accepted: 'The :attribute must be accepted.',
+  alpha: 'The :attribute may only contain letters.'
 }

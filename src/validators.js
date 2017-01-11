@@ -89,3 +89,9 @@ export function validateAccepted(attribute, value) {
 
   return acceptable.indexOf(value) >= 0
 }
+
+export function validateAlpha(attribute, value) {
+  const regex = /^[A-z]+$/
+
+  return (typeof value === 'string') && regex.test(value)
+}

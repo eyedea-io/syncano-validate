@@ -76,3 +76,9 @@ export function validateDigits(attribute, value, parameters) {
 export function validateInteger(attribute, value) {
   return value === parseInt(value, 10)
 }
+
+export function validateAccepted(attribute, value) {
+  const acceptable = [true, 'true', 'on', 'yes', 1, '1']
+
+  return acceptable.indexOf(value) >= 0
+}

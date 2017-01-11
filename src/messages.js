@@ -15,5 +15,6 @@ export default {
   boolean: 'The :attribute field must be true or false.',
   url: 'The :attribute format is invalid.',
   digits: 'The :attribute must be :digits digits.',
-  integer: 'The :attribute must be an integer.'
+  integer: 'The :attribute must be an integer.',
+  accepted: 'The :attribute must be accepted.'
 }

@@ -5,7 +5,6 @@
 
 ## TODO:
 
-* Accepted
 * After (Date)
 * Alpha
 * Alpha Dash

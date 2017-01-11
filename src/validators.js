@@ -73,6 +73,17 @@ export function validateDigits(attribute, value, parameters) {
   return !matchNumbers.test(value) && (value.toString()).length === parameters[0]
 }
 
+export function validateInteger(attribute, value) {
+  return value === parseInt(value, 10)
+}
+
+export function validateAccepted(attribute, value) {
+  const acceptable = [true, 'true', 'on', 'yes', 1, '1']
+
+  return acceptable.indexOf(value) >= 0
+
+}
+
 export function validateDigitsBetween(attribute, value, parameters) {
   this.requireParameterCount(2, parameters, 'digitsBetween')
   const length = (value.toString()).length

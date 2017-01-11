@@ -386,6 +386,129 @@ describe('rule', () => {
   })
 
   /*
+   * INTEGER
+   * ----------------------------------------------------- */
+  describe('#integer', () => {
+    it('throws error when an attribute is not integer', () => {
+      const data = { number: { validate: 'integer', value: 8.12 } }
+      const check = err => assert.equal(err.number,
+        'The number must be an integer.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('throws error when an attribute is string and is not integer', () => {
+      const data = { number: { validate: 'integer', value: 'test' } }
+      const check = err => assert.equal(err.number,
+        'The number must be an integer.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('throws error when an attribute is array and is not integer', () => {
+      const data = { number: { validate: 'integer', value: [1, 2, 3] } }
+      const check = err => assert.equal(err.number,
+        'The number must be an integer.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('throws error when an attribute is null and is not integer', () => {
+      const data = { number: { validate: 'integer', value: null } }
+      const check = err => assert.equal(err.number,
+        'The number must be an integer.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('throws error when an attribute is object and is not integer', () => {
+      const data = { number: { validate: 'integer', value: {notinteger: 1} } }
+      const check = err => assert.equal(err.number,
+        'The number must be an integer.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('throws error when an attribute is boolean and is not integer', () => {
+      const data = { number: { validate: 'integer', value: true } }
+      const check = err => assert.equal(err.number,
+        'The number must be an integer.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('passes when number is integer', () => {
+      const data = { number: { validate: 'integer', value: 1 } }
+      const check = err => assert.isUndefined(err.number)
+      return validate(data).then(check).catch(check)
+    })
+  })
+
+  /*
+   * ACCEPTED
+   * ----------------------------------------------------- */
+  describe('#accepted', () => {
+    it('throws error when an attribute is not given', () => {
+      const data = { field: { validate: 'accepted' } }
+      const check = err => assert.equal(err.field,
+        'The field must be accepted.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('throws error when an attribute is not accepted', () => {
+      const data = { field: { validate: 'accepted', value: false } }
+      const check = err => assert.equal(err.field,
+        'The field must be accepted.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('passes when field value is true', () => {
+      const data = { field: { validate: 'accepted', value: true } }
+      const check = err => assert.isUndefined(err.field)
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('passes when field value is \'true\'', () => {
+      const data = { field: { validate: 'accepted', value: 'true' } }
+      const check = err => assert.isUndefined(err.field)
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('passes when field value is yes', () => {
+      const data = { field: { validate: 'accepted', value: 'yes' } }
+      const check = err => assert.isUndefined(err.field)
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('passes when field value is on', () => {
+      const data = { field: { validate: 'accepted', value: 'on' } }
+      const check = err => assert.isUndefined(err.field)
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('passes when field value is 1', () => {
+      const data = { field: { validate: 'accepted', value: 1 } }
+      const check = err => assert.isUndefined(err.field)
+
+      return validate(data).then(check).catch(check)
+    })
+  })
+  
+  /*
    * DIGITS BETWEEN
    * ----------------------------------------------------- */
   describe('#digits_between', () => {

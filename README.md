@@ -6,7 +6,6 @@
 ## TODO:
 
 * After (Date)
-* Alpha
 * Alpha Dash
 * Alpha Numeric
 * Before (Date)
@@ -15,7 +14,6 @@
 * Date
 * Date Format
 * Different
-* Digits Between
 * Dimensions (Image Files)
 * E-Mail
 * File

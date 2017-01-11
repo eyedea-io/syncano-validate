@@ -547,4 +547,43 @@ describe('rule', () => {
       return validate(data).then(check).catch(check)
     })
   })
+
+  /*
+   * ALPHA
+   * ----------------------------------------------------- */
+  describe('#alpha', () => {
+    it('throws error when an attribute does not contains only letters', () => {
+      const data = { text: { validate: 'alpha', value: 'test123' } }
+      const check = err => assert.equal(err.text,
+        'The text may only contain letters.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('throws error when an attribute is not a string', () => {
+      const data = { text: { validate: 'alpha', value: 123 } }
+      const check = err => assert.equal(err.text,
+        'The text may only contain letters.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('throws error when an attribute has space in text', () => {
+      const data = { text: { validate: 'alpha', value: 'test test' } }
+      const check = err => assert.equal(err.text,
+        'The text may only contain letters.'
+      )
+
+      return validate(data).then(check).catch(check)
+    })
+
+    it('passes when attribute contains only letters ', () => {
+      const data = { text: { validate: 'alpha', value: 'tEsT' } }
+      const check = err => assert.isUndefined(err.text)
+
+      return validate(data).then(check).catch(check)
+    })
+  })
 })

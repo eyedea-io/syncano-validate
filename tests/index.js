@@ -588,7 +588,7 @@ describe('rule', () => {
   })
 
   /*
-   * ALPHA
+   * ALPHA NUMERIC
    * ----------------------------------------------------- */
   describe('#alpha_num', () => {
     it('throws error when an attribute does not contains only letters or numbers', () => {

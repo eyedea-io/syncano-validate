@@ -7,7 +7,6 @@
 
 * After (Date)
 * Alpha Dash
-* Alpha Numeric
 * Before (Date)
 * Between
 * Confirmed

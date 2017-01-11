@@ -5,7 +5,6 @@
 
 ## TODO:
 
-* Accepted
 * After (Date)
 * Alpha
 * Alpha Dash
@@ -23,7 +22,6 @@
 * Filled
 * Image (File)
 * In Array
-* Integer
 * IP Address
 * JSON
 * MIME Types

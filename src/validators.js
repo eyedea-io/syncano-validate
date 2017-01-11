@@ -79,3 +79,13 @@ export function validateDigitsBetween(attribute, value, parameters) {
   const matchNumbers = new RegExp('/[^0-9]/')
   return !matchNumbers.test(value) && length >= parameters[0] && length <= parameters[1]
 }
+
+export function validateInteger(attribute, value) {
+  return value === parseInt(value, 10)
+}
+
+export function validateAccepted(attribute, value) {
+  const acceptable = [true, 'true', 'on', 'yes', 1, '1']
+
+  return acceptable.indexOf(value) >= 0
+}

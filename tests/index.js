@@ -1,19 +1,18 @@
 const chai = require('chai')
-const syncano = require('syncano')
+const chaiAsPromised = require('chai-as-promised')
+const fetchMock = require('fetch-mock')
 const Validator = require('../src').default
+const {url} = require('../src/helpers')
+
+chai.use(chaiAsPromised)
 
 const { assert } = chai
 
-let connection
 let validator
 let validate
 
 beforeEach(() => {
-  connection = syncano({
-    apiKey: process.env.SYNCANO_API_KEY
-  }).setInstanceName(process.env.SYNCANO_INSTANCE_NAME)
-
-  validator = new Validator(connection)
+  validator = new Validator()
   validate = validator.validate.bind(validator)
 })
 
@@ -31,24 +30,6 @@ describe('validate function', () => {
     )
 
     return validate(data).catch(check)
-  })
-
-  it.skip('passes for valid connection', () => {
-    const check = value => assert.ok(value)
-
-    return validator.validateConnection().then(check).catch(check)
-  })
-
-  it.skip('throws error for invalid connection', () => {
-    const invalidConnection = syncano({
-      apiKey: 'invalidApiKey'
-    }).setInstanceName('invalidInstanceName')
-    const invalidValidator = new Validator(invalidConnection)
-
-    const check = err => assert.equal(err.message, 'No such API Key.')
-
-    return invalidValidator.validateConnection()
-      .catch(check)
   })
 })
 
@@ -280,21 +261,57 @@ describe('rule', () => {
       return validate(data).then(check).catch(check)
     })
 
-    it.skip('throws error for non-existing argument', () => {
-      const data = { attributeName: { validate: 'exists:tag,name', value: 'non_existing_tag' } }
-      const check = err => assert.equal(err.attributeName,
-        'The selected attribute name is invalid.'
-      )
+    it('throws error for non-existing argument', done => {
+      const data = { attributeName: { validate: 'exists:car,model', value: 'Passat' } }
+      const expected = { objects: [] }
+      const className = 'car'
+      const query = {
+        model: {_eq: 'Passat'}
+      }
 
-      return validate(data).then(check).catch(check)
+      fetchMock.get(url(`classes/${className}/objects/`, query), expected)
+
+      const check = err => {
+        fetchMock.get(url(`classes/${className}/objects/`, query), expected)
+        assert.equal(err.attributeName,
+          'The selected attribute name is invalid.'
+        )
+        fetchMock.restore()
+        done()
+      }
+
+      validate(data).then(check).catch(check)
+      fetchMock.restore()
     })
 
-    it.skip('passes for existing argument', () => {
-      const data = { attributeName: { validate: 'exists:tag,name', value: 'existing_tag' } }
-      const check = err => assert.equal(err.attributeName, undefined)
+    it('resolves with valid output', done => {
+      const data = { attributeName: { validate: 'exists:car,model', value: 'Polo' } }
+      const expected = { objects: [{hello: 'world'}] }
+      const className = 'car'
+      const query = {
+        model: {_eq: 'Polo'}
+      }
 
-      return validate(data).then(check).catch(check)
+      console.log(url(`classes/${className}/objects/`, query))
+
+      fetchMock.get(url(`classes/${className}/objects/`, query), expected)
+
+      const check = err => {
+        fetchMock.get(url(`classes/${className}/objects/`, query), expected)
+        assert.isUndefined(err.attributeName)
+        fetchMock.restore()
+        done()
+      }
+
+      validate(data).then(check).catch(check)
     })
+
+    // it('passes for existing argument', () => {
+    //   const data = { attributeName: { validate: 'exists:car,model', value: 'Polo' } }
+    //   const check = err => assert.eventually.equal(err.attributeName, undefined, 'Syncano Error')
+    //
+    //   return validate(data).then(check).catch(check)
+    // })
   })
 
   describe('#in', () => {

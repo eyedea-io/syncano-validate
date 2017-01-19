@@ -4,19 +4,9 @@ import { is, coerce, snakeCase, studlyCase } from './helpers'
 import MESSAGES from './messages'
 
 export default class Validator {
-  constructor(connection) {
-    this.connection = connection
-
+  constructor() {
     this.numericRules = ['Numeric', 'Integer']
     this.sizeRules = ['Min', 'Max', 'Between']
-  }
-
-  validateConnection() {
-    return new Promise((resolve, reject) => {
-      this.connection.Instance.please().list()
-        .then(() => resolve(true))
-        .catch(err => reject(err))
-    })
   }
 
   setData(data) {
@@ -78,6 +68,7 @@ export default class Validator {
       Promise
         .all(this.attributesPass())
         .then(() => this.passes() ? resolve() : reject(this.errors))
+        .catch(() => {})
     })
   }
 
@@ -118,6 +109,7 @@ export default class Validator {
             this.addError(attribute, rule, parameters)
           }
         })
+        .catch(() => {})
       } else if (!passed) {
         this.addError(attribute, rule, parameters)
       }

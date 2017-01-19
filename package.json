@@ -53,9 +53,12 @@
   },
   "dependencies": {
     "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "es6-promise": "^4.0.5",
+    "fetch-mock": "^5.8.1",
     "is_js": "^0.9.0",
+    "isomorphic-fetch": "^2.2.1",
     "lodash.camelcase": "^4.3.0",
-    "lodash.snakecase": "^4.1.1",
-    "syncano": "^1.0.28"
+    "lodash.snakecase": "^4.1.1"
   }
 }

@@ -11,7 +11,7 @@
 [circleci]: https://circleci.com/gh/eyedea-io/syncano-validate/tree/devel
 [circleci-badge]: https://circleci.com/gh/eyedea-io/syncano-validate.svg?style=shield&circle-token=4f0733cbf425699a9ca0bc95d44ade178e5a7abd
 [codecov]: https://codecov.io/gh/eyedea-io/syncano-validate
-[codecov-badge]: https://codecov.io/gh/eyedea-io/syncano-validate/branch/master/graph/badge.svg
+[codecov-badge]: https://codecov.io/gh/eyedea-io/syncano-validate/branch/devel/graph/badge.svg
 
 ```
 $ npm install syncano-validate

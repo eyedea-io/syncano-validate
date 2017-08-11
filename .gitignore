@@ -17,3 +17,7 @@ coverage
 
 #coverage
 .nyc_output
+
+# Config
+.vscode
+.idea

@@ -1,9 +1,9 @@
 import * as replacers from './replacers'
 import * as validators from './validators'
-import { is, coerce, snakeCase, studlyCase } from './helpers'
+import { is, coerce, snakeCase, studlyCase, isSyncanoServer } from './helpers'
 import MESSAGES from './messages'
 
-export default class Validator {
+class Validator {
   constructor(connection) {
     this.connection = connection
 
@@ -21,16 +21,14 @@ export default class Validator {
 
   setData(data) {
     // TODO: Handle array inputs
-    // Map attribute to value
-    this.data = Object.keys(data).reduce((all, attribute) => ({
-      ...all,
-      [attribute]: data[attribute].value
-    }), {})
+    this.data = data
+  }
 
+  setRules(rules) {
     // Map attribute to array of rules
-    this.rules = Object.keys(data).reduce((all, attribute) => ({
+    this.rules = Object.keys(rules).reduce((all, attribute) => ({
       ...all,
-      [attribute]: this.parseRules(data[attribute].validate)
+      [attribute]: this.parseRules(rules[attribute])
     }), {})
   }
 
@@ -64,13 +62,14 @@ export default class Validator {
     rule = studlyCase(rule)
 
     return rule === 'Int' ? 'Integer' :
-           rule === 'Bool' ? 'Boolean' : rule
+      rule === 'Bool' ? 'Boolean' : rule
   }
 
-  validate(data) {
+  validate(data = {}, rules = {}) {
     return new Promise((resolve, reject) => {
       try {
         this.setData(data)
+        this.setRules(rules)
       } catch (err) {
         reject(err)
       }
@@ -141,7 +140,7 @@ export default class Validator {
 
     if (this.sizeRules.indexOf(rule) >= 0) {
       const type = this.hasRule(attribute, this.numericRules) ? 'numeric' :
-                   this.hasRule(attribute, ['Array']) ? 'array' : 'string'
+        this.hasRule(attribute, ['Array']) ? 'array' : 'string'
 
       message = message[type]
     }
@@ -180,6 +179,12 @@ export default class Validator {
     }
   }
 
+  requireSyncanoEnvironment(rule, attribute) {
+    if (!isSyncanoServer()) {
+      throw new Error(`Rule "${rule}" of attribute "${attribute}" can be run only in Syncano environment.`)
+    }
+  }
+
   getSize(attribute, value) {
     const hasNumeric = this.hasRule(attribute, this.numericRules)
 
@@ -204,6 +209,11 @@ function ValidationError(message, errors) {
 
 ValidationError.prototype = Error.prototype
 
-export {
-  ValidationError
-}
+const validator = new Validator()
+
+validator.validate = validator.validate.bind(validator)
+
+const { validate } = validator
+
+export { ValidationError, validate }
+export default validator

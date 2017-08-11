@@ -1,3 +1,4 @@
+import { data } from 'syncano-server'
 import { is } from './helpers'
 
 export function validateRequired(attribute, value) {
@@ -25,21 +26,17 @@ export function validateMax(attribute, value, parameters) {
 }
 
 export function validateExists(attribute, value, parameters) {
+  this.requireSyncanoEnvironment('exists', attribute)
   this.requireParameterCount(2, parameters, 'exists')
 
   const [className, column] = parameters
 
   return new Promise((resolve, reject) => {
-    this.connection.DataObject.please()
-      .list({ className })
-      .filter({ [column]: { _eq: value } })
-      .count()
-      .then(response => {
-        resolve(response.objects_count > 0)
-      })
-      .catch(err => {
-        reject(err.message)
-      })
+    data[className]
+      .where(column, value)
+      .list()
+      .then(objects => resolve(objects.length > 0))
+      .catch(err => reject(err.message))
   })
 }
 

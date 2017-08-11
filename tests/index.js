@@ -1,36 +1,23 @@
 const chai = require('chai')
-const syncano = require('syncano')
-const Validator = require('../src').default
+const { default: syncano } = require('syncano-server')
+const { default: validator } = require('../src')
 
 const { assert } = chai
-
-let connection
-let validator
-let validate
-
-beforeEach(() => {
-  connection = syncano({
-    apiKey: process.env.SYNCANO_API_KEY
-  }).setInstanceName(process.env.SYNCANO_INSTANCE_NAME)
-
-  validator = new Validator(connection)
-  validate = validator.validate.bind(validator)
-})
+const { validate } = validator
 
 describe('validate function', () => {
   it('finish execution without error', () => {
-    assert.doesNotThrow(() => {
-      validate({})
-    })
+    assert.doesNotThrow(() => validate())
   })
 
   it('throws error for invalid rule', () => {
-    const data = { attributeName: { validate: 'invalid_rule' } }
+    const data = {}
+    const rules = { attributeName: 'invalid_rule' }
     const check = err => assert.equal(err.message,
       'Invalid validation rule invalid_rule'
     )
 
-    return validate(data).catch(check)
+    return validate(data, rules).catch(check)
   })
 
   it.skip('passes for valid connection', () => {
@@ -40,10 +27,7 @@ describe('validate function', () => {
   })
 
   it.skip('throws error for invalid connection', () => {
-    const invalidConnection = syncano({
-      apiKey: 'invalidApiKey'
-    }).setInstanceName('invalidInstanceName')
-    const invalidValidator = new Validator(invalidConnection)
+    const invalidValidator = validator.connection(syncano)
 
     const check = err => assert.equal(err.message, 'No such API Key.')
 
@@ -58,21 +42,23 @@ describe('rule', () => {
    * ----------------------------------------------------- */
   describe('#required', () => {
     it('throws error for undefined argument value', () => {
-      const data = { attributeName: { validate: 'required' } }
+      const data = {}
+      const rules = { attributeName: 'required' }
       const check = err => assert.equal(err.attributeName,
         'The attribute name field is required.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('throws error for empty argument', () => {
-      const data = { attributeName: { validate: 'required', value: '' } }
+      const data = { attributeName: '' }
+      const rules = { attributeName: 'required' }
       const check = err => assert.equal(err.attributeName,
         'The attribute name field is required.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes with valid argument', () => {
@@ -88,90 +74,101 @@ describe('rule', () => {
    * ----------------------------------------------------- */
   describe('min', () => {
     it('throws error without parameter', () => {
-      const data = { attributeName: { validate: 'min' } }
+      const data = {}
+      const rules = { attributeName: 'min' }
       const check = err => assert.equal(err.message,
         'Validation rule min requires at least 1 parameters.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('throws error when parameter is not a number', () => {
-      const data = { attributeName: { validate: 'min:notNumber' } }
+      const data = {}
+      const rules = { attributeName: 'min:notNumber' }
       const check = err => assert.equal(err.message,
         'Validation rule min requires number parameter.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('throws error for number smaller than parameter', () => {
-      const data = { attributeName: { validate: 'min:7|numeric', value: 6 } }
+      const data = { attributeName: 5 }
+      const rules = { attributeName: 'min:7|numeric' }
       const check = err => assert.equal(err.attributeName,
         'The attribute name must be at least 7.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes for number larger than parameter', () => {
-      const data = { attributeName: { validate: 'min:7|numeric', value: 100 } }
+      const data = { attributeName: 100 }
+      const rules = { attributeName: 'min:7|numeric' }
       const check = err => assert.equal(err.attributeName, undefined)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes for number equal to parameter', () => {
-      const data = { attributeName: { validate: 'min:7|numeric', value: 7 } }
+      const data = { attributeName: 7 }
+      const rules = { attributeName: 'min:7|numeric' }
       const check = err => assert.equal(err.attributeName, undefined)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('throws error for string shorter than parameter', () => {
-      const data = { attributeName: { validate: 'min:7', value: 'hello' } }
+      const data = { attributeName: 'hello' }
+      const rules = { attributeName: 'min:7' }
       const check = err => assert.equal(err.attributeName,
         'The attribute name must be at least 7 characters.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes for string longer than parameter', () => {
-      const data = { attributeName: { validate: 'min:3', value: 'hello' } }
+      const data = { attributeName: 'hello' }
+      const rules = { attributeName: 'min:3' }
       const check = err => assert.equal(err.attributeName, undefined)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes for string length equal to parameter', () => {
-      const data = { attributeName: { validate: 'min:5', value: 'hello' } }
+      const data = { attributeName: 'hello' }
+      const rules = { attributeName: 'min:5' }
       const check = err => assert.equal(err.attributeName, undefined)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('throws error for array length smaller than parameter', () => {
-      const data = { attributeName: { validate: 'min:3|array', value: ['hello', 'world'] } }
+      const data = { attributeName: ['hello', 'world'] }
+      const rules = { attributeName: 'min:3|array' }
       const check = err => assert.equal(err.attributeName,
         'The attribute name must have at least 3 items.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes for array length larger than parameter', () => {
-      const data = { attributeName: { validate: 'min:1|array', value: ['hello', 'world'] } }
+      const data = { attributeName: ['hello', 'world'] }
+      const rules = { attributeName: 'min:1|array' }
       const check = err => assert.equal(err.attributeName, undefined)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes for array length equal to parameter', () => {
-      const data = { attributeName: { validate: 'min:2|array', value: ['hello', 'world'] } }
+      const data = { attributeName: ['hello', 'world'] }
+      const rules = { attributeName: 'min:2|array' }
       const check = err => assert.equal(err.attributeName, undefined)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
   })
 
@@ -180,90 +177,101 @@ describe('rule', () => {
    * ----------------------------------------------------- */
   describe('max', () => {
     it('throws error without parameter', () => {
-      const data = { attributeName: { validate: 'max' } }
+      const data = {}
+      const rules = { attributeName: 'max' }
       const check = err => assert.equal(err.message,
         'Validation rule max requires at least 1 parameters.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('throws error when parameter is not a number', () => {
-      const data = { attributeName: { validate: 'max:notNumber' } }
+      const data = {}
+      const rules = { attributeName: 'max:notNumber' }
       const check = err => assert.equal(err.message,
         'Validation rule max requires number parameter.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('throws error for number greater than parameter', () => {
-      const data = { attributeName: { validate: 'max:7|numeric', value: 8 } }
+      const data = { attributeName: 8 }
+      const rules = { attributeName: 'max:7|numeric' }
       const check = err => assert.equal(err.attributeName,
         'The attribute name may not be greater than 7.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes for number smaller than parameter', () => {
-      const data = { attributeName: { validate: 'max:7|numeric', value: 5 } }
+      const data = { attributeName: 5 }
+      const rules = { attributeName: 'max:7|numeric' }
       const check = err => assert.equal(err.attributeName, undefined)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes for number equal to parameter', () => {
-      const data = { attributeName: { validate: 'max:7|numeric', value: 7 } }
+      const data = { attributeName: 7 }
+      const rules = { attributeName: 'max:7|numeric' }
       const check = err => assert.equal(err.attributeName, undefined)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('throws error for string longer than parameter', () => {
-      const data = { attributeName: { validate: 'max:7', value: 'hello world' } }
+      const data = { attributeName: 'hello world' }
+      const rules = { attributeName: 'max:7' }
       const check = err => assert.equal(err.attributeName,
         'The attribute name may not be greater than 7 characters.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes for string shorter than parameter', () => {
-      const data = { attributeName: { validate: 'max:7', value: 'hello' } }
+      const data = { attributeName: 'hello' }
+      const rules = { attributeName: 'max:7' }
       const check = err => assert.equal(err.attributeName, undefined)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes for string length equal to parameter', () => {
-      const data = { attributeName: { validate: 'max:5', value: 'hello' } }
+      const data = { attributeName: 'hello' }
+      const rules = { attributeName: 'max:5' }
       const check = err => assert.equal(err.attributeName, undefined)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('throws error for array length greater than parameter', () => {
-      const data = { attributeName: { validate: 'max:3|array', value: ['hello', 'world', 'or', 'nope'] } }
+      const data = { attributeName: ['hello', 'world', 'or', 'not'] }
+      const rules = { attributeName: 'max:3|array' }
       const check = err => assert.equal(err.attributeName,
         'The attribute name may not have more than 3 items.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes for array length smaller than parameter', () => {
-      const data = { attributeName: { validate: 'max:3|array', value: ['hello', 'world'] } }
+      const data = { attributeName: ['hello', 'world'] }
+      const rules = { attributeName: 'max:3|array' }
       const check = err => assert.equal(err.attributeName, undefined)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes for array length equal to parameter', () => {
-      const data = { attributeName: { validate: 'max:2|array', value: ['hello', 'world'] } }
+      const data = { attributeName: ['hello', 'world'] }
+      const rules = { attributeName: 'max:2|array' }
       const check = err => assert.equal(err.attributeName, undefined)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
   })
 
@@ -272,45 +280,50 @@ describe('rule', () => {
    * ----------------------------------------------------- */
   describe('exists', () => {
     it('throws error when passed 1 parameter', () => {
-      const data = { attributeName: { validate: 'exists:tag', value: 'news' } }
+      const data = { framework: 'news' }
+      const rules = { framework: 'exists:tag' }
       const check = err => assert.equal(err.message,
         'Validation rule exists requires at least 2 parameters.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it.skip('throws error for non-existing argument', () => {
-      const data = { attributeName: { validate: 'exists:tag,name', value: 'non_existing_tag' } }
+      const data = { framework: 'non_existing_tag' }
+      const rules = { framework: 'exists:tag,name' }
       const check = err => assert.equal(err.attributeName,
         'The selected attribute name is invalid.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it.skip('passes for existing argument', () => {
-      const data = { attributeName: { validate: 'exists:tag,name', value: 'existing_tag' } }
+      const data = { framework: 'existing_tag' }
+      const rules = { framework: 'exists:tag,name' }
       const check = err => assert.equal(err.attributeName, undefined)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
   })
 
   describe('#in', () => {
     it('throws error when argument is not in parameters', () => {
-      const data = { framework: { validate: 'in:react,vue,angular', value: 'riot' } }
+      const data = { framework: 'riot' }
+      const rules = { framework: 'in:react,vue,angular' }
       const check = err => assert.equal(err.framework,
         'The selected framework is invalid.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
     it('passes when argument is in parameters', () => {
-      const data = { framework: { validate: 'in:react,vue,angular', value: 'vue' } }
+      const data = { framework: 'vue' }
+      const rules = { framework: 'in:react,vue,angular' }
       const check = err => assert.equal(err.framework, undefined)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
   })
 
@@ -319,30 +332,34 @@ describe('rule', () => {
    * ----------------------------------------------------- */
   describe('boolean', () => {
     it('throws error when argument is not true or false', () => {
-      const data = { tested: { validate: 'boolean', value: '2' } }
+      const data = { tested: '2' }
+      const rules = { tested: 'boolean' }
       const check = err => assert.equal(err.tested,
         'The tested field must be true or false.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
     it('passes when argument is true', () => {
-      const data = { tested: { validate: 'boolean', value: true } }
+      const data = { tested: true }
+      const rules = { tested: 'boolean' }
       const check = err => assert.isUndefined(err.tested)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
     it('passes when argument is 0', () => {
-      const data = { tested: { validate: 'boolean', value: 0 } }
+      const data = { tested: 0 }
+      const rules = { tested: 'boolean' }
       const check = err => assert.isUndefined(err.tested)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
     it('passes when argument is \'1\'', () => {
-      const data = { tested: { validate: 'boolean', value: '1' } }
+      const data = { tested: '1' }
+      const rules = { tested: 'boolean' }
       const check = err => assert.isUndefined(err.tested)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
   })
 
@@ -351,17 +368,19 @@ describe('rule', () => {
    * ----------------------------------------------------- */
   describe('url', () => {
     it('throws error when url is invalid', () => {
-      const data = { url: { validate: 'url', value: 'htt:/google.com' } }
+      const data = { url: 'htt://google.com' }
+      const rules = { url: 'url' }
       const check = err => assert.equal(err.url,
-       'The url format is invalid.'
-     )
-      return validate(data).then(check).catch(check)
+        'The url format is invalid.'
+      )
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes when url is valid', () => {
-      const data = { url: { validate: 'url', value: 'https://github.com' } }
+      const data = { url: 'http://github.com' }
+      const rules = { url: 'url' }
       const check = err => assert.equal(err.url, undefined)
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
   })
 
@@ -370,18 +389,20 @@ describe('rule', () => {
    * ----------------------------------------------------- */
   describe('#digits', () => {
     it('throws error when an attribute is not given exact number of digits', () => {
-      const data = { number: { validate: 'digits:8', value: 123 } }
+      const data = { number: 123 }
+      const rules = { number: 'digits:8' }
       const check = err => assert.equal(err.number,
         'The number must be 8 digits.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes when number is ', () => {
-      const data = { number: { validate: 'digits:3', value: 133 } }
+      const data = { number: 123 }
+      const rules = { number: 'digits:3' }
       const check = err => assert.equal(err.number, undefined)
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
   })
 
@@ -390,18 +411,20 @@ describe('rule', () => {
    * ----------------------------------------------------- */
   describe('#digits_between', () => {
     it('throws error when an attribute is not between min and max', () => {
-      const data = { number: { validate: 'digits_between:2,4', value: 3 } }
+      const data = { number: 3 }
+      const rules = { number: 'digits_between:2,4' }
       const check = err => assert.equal(err.number,
         'The number must be between 2 and 4 digits.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes when number is between min and max ', () => {
-      const data = { number: { validate: 'digits_between:2,4', value: 32 } }
+      const data = { number: 32 }
+      const rules = { number: 'digits_between:2,4' }
       const check = err => assert.equal(err.number, undefined)
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
   })
   /*
@@ -409,63 +432,70 @@ describe('rule', () => {
    * ----------------------------------------------------- */
   describe('#integer', () => {
     it('throws error when an attribute is not integer', () => {
-      const data = { number: { validate: 'integer', value: 8.12 } }
+      const data = { number: 8.12 }
+      const rules = { number: 'integer' }
       const check = err => assert.equal(err.number,
         'The number must be an integer.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('throws error when an attribute is string and is not integer', () => {
-      const data = { number: { validate: 'integer', value: 'test' } }
+      const data = { number: 'test' }
+      const rules = { number: 'integer' }
       const check = err => assert.equal(err.number,
         'The number must be an integer.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('throws error when an attribute is array and is not integer', () => {
-      const data = { number: { validate: 'integer', value: [1, 2, 3] } }
+      const data = { number: [1, 2, 3] }
+      const rules = { number: 'integer' }
       const check = err => assert.equal(err.number,
         'The number must be an integer.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('throws error when an attribute is null and is not integer', () => {
-      const data = { number: { validate: 'integer', value: null } }
+      const data = { number: null }
+      const rules = { number: 'integer' }
       const check = err => assert.equal(err.number,
         'The number must be an integer.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('throws error when an attribute is object and is not integer', () => {
-      const data = { number: { validate: 'integer', value: {notinteger: 1} } }
+      const data = { number: { hello: 1 } }
+      const rules = { number: 'integer' }
       const check = err => assert.equal(err.number,
         'The number must be an integer.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('throws error when an attribute is boolean and is not integer', () => {
-      const data = { number: { validate: 'integer', value: true } }
+      const data = { number: true }
+      const rules = { number: 'integer' }
       const check = err => assert.equal(err.number,
         'The number must be an integer.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes when number is integer', () => {
-      const data = { number: { validate: 'integer', value: 1 } }
+      const data = { number: 2 }
+      const rules = { number: 'integer' }
       const check = err => assert.isUndefined(err.number)
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
   })
 
@@ -474,56 +504,63 @@ describe('rule', () => {
    * ----------------------------------------------------- */
   describe('#accepted', () => {
     it('throws error when an attribute is not given', () => {
-      const data = { field: { validate: 'accepted' } }
+      const data = {}
+      const rules = { field: 'accepted' }
       const check = err => assert.equal(err.field,
         'The field must be accepted.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('throws error when an attribute is not accepted', () => {
-      const data = { field: { validate: 'accepted', value: false } }
+      const data = { field: false }
+      const rules = { field: 'accepted' }
       const check = err => assert.equal(err.field,
         'The field must be accepted.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes when field value is true', () => {
-      const data = { field: { validate: 'accepted', value: true } }
+      const data = { field: true }
+      const rules = { field: 'accepted' }
       const check = err => assert.isUndefined(err.field)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes when field value is \'true\'', () => {
-      const data = { field: { validate: 'accepted', value: 'true' } }
+      const data = { field: 'true' }
+      const rules = { field: 'accepted' }
       const check = err => assert.isUndefined(err.field)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes when field value is yes', () => {
-      const data = { field: { validate: 'accepted', value: 'yes' } }
+      const data = { field: 'yes' }
+      const rules = { field: 'accepted' }
       const check = err => assert.isUndefined(err.field)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes when field value is on', () => {
-      const data = { field: { validate: 'accepted', value: 'on' } }
+      const data = { field: 'on' }
+      const rules = { field: 'accepted' }
       const check = err => assert.isUndefined(err.field)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes when field value is 1', () => {
-      const data = { field: { validate: 'accepted', value: 1 } }
+      const data = { field: 1 }
+      const rules = { field: 'accepted' }
       const check = err => assert.isUndefined(err.field)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
   })
 
@@ -532,19 +569,21 @@ describe('rule', () => {
    * ----------------------------------------------------- */
   describe('#digits_between', () => {
     it('throws error when an attribute is not between min and max', () => {
-      const data = { number: { validate: 'digits_between:2,4', value: 3 } }
+      const data = { number: 3 }
+      const rules = { number: 'digits_between:2,4' }
       const check = err => assert.equal(err.number,
         'The number must be between 2 and 4 digits.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes when number is between min and max ', () => {
-      const data = { number: { validate: 'digits_between:2,4', value: 32 } }
+      const data = { number: 32 }
+      const rules = { number: 'digits_between:2,4' }
       const check = err => assert.equal(err.number, undefined)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
   })
 
@@ -553,37 +592,41 @@ describe('rule', () => {
    * ----------------------------------------------------- */
   describe('#alpha', () => {
     it('throws error when an attribute does not contains only letters', () => {
-      const data = { text: { validate: 'alpha', value: 'test123' } }
+      const data = { text: 'test123' }
+      const rules = { text: 'alpha' }
       const check = err => assert.equal(err.text,
         'The text may only contain letters.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('throws error when an attribute is not a string', () => {
-      const data = { text: { validate: 'alpha', value: 123 } }
+      const data = { text: 123 }
+      const rules = { text: 'alpha' }
       const check = err => assert.equal(err.text,
         'The text may only contain letters.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('throws error when an attribute has space in text', () => {
-      const data = { text: { validate: 'alpha', value: 'test test' } }
+      const data = { text: 'test test' }
+      const rules = { text: 'alpha' }
       const check = err => assert.equal(err.text,
         'The text may only contain letters.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes when attribute contains only letters ', () => {
-      const data = { text: { validate: 'alpha', value: 'tEsT' } }
+      const data = { text: 'tEsT' }
+      const rules = { text: 'alpha' }
       const check = err => assert.isUndefined(err.text)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
   })
 
@@ -592,58 +635,65 @@ describe('rule', () => {
    * ----------------------------------------------------- */
   describe('#alpha_num', () => {
     it('throws error when an attribute does not contains only letters or numbers', () => {
-      const data = { text: { validate: 'alpha_num', value: 'test-123' } }
+      const data = { text: 'test-123' }
+      const rules = { text: 'alpha_num' }
       const check = err => assert.equal(err.text,
         'The text may only contain letters and numbers.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('throws error when an attribute is not a string', () => {
-      const data = { text: { validate: 'alpha_num', value: true } }
+      const data = { text: true }
+      const rules = { text: 'alpha_num' }
       const check = err => assert.equal(err.text,
         'The text may only contain letters and numbers.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('throws error when an attribute has space in text', () => {
-      const data = { text: { validate: 'alpha_num', value: 'test 123' } }
+      const data = { text: 'test 123' }
+      const rules = { text: 'alpha_num' }
       const check = err => assert.equal(err.text,
         'The text may only contain letters and numbers.'
       )
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes when attribute contains only letters ', () => {
-      const data = { text: { validate: 'alpha_num', value: 'tEsT' } }
+      const data = { text: 'tEsT' }
+      const rules = { text: 'alpha_num' }
       const check = err => assert.isUndefined(err.text)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes when attribute contains only numbers as a string', () => {
-      const data = { text: { validate: 'alpha_num', value: '123' } }
+      const data = { text: '123' }
+      const rules = { text: 'alpha_num' }
       const check = err => assert.isUndefined(err.text)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes when attribute contains only numbers ', () => {
-      const data = { text: { validate: 'alpha_num', value: 123 } }
+      const data = { text: 123 }
+      const rules = { text: 'alpha_num' }
       const check = err => assert.isUndefined(err.text)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
 
     it('passes when attribute contains letters and numbers ', () => {
-      const data = { text: { validate: 'alpha_num', value: 'test123' } }
+      const data = { text: 'test123' }
+      const rules = { text: 'alpha_num' }
       const check = err => assert.isUndefined(err.text)
 
-      return validate(data).then(check).catch(check)
+      return validate(data, rules).then(check).catch(check)
     })
   })
 })

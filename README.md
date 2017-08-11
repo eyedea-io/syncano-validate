@@ -1,3 +1,7 @@
+# Syncano Validator
+
+> Client/Server side validation library based on Laravel.
+
 [![XO code style][xo-badge]][xo]
 [![CircleCI][circleci-badge]][circleci]
 [![codecov][codecov-badge]][codecov]
@@ -9,39 +13,11 @@
 [codecov]: https://codecov.io/gh/eyedea-io/syncano-validator
 [codecov-badge]: https://codecov.io/gh/eyedea-io/syncano-validator/branch/master/graph/badge.svg
 
-# syncano-validator
+```
+$ npm install syncano-validation
+```
 
-## TODO:
-
-* After (Date)
-* Alpha Dash
-* Before (Date)
-* Between
-* Confirmed
-* Date
-* Date Format
-* Different
-* Dimensions (Image Files)
-* E-Mail
-* File
-* Filled
-* Image (File)
-* In Array
-* IP Address
-* JSON
-* MIME Types
-* MIME Type By File Extension
-* Nullable
-* Not In
-* Present
-* Regular Expression
-* Same
-* Size
-* String
-* Timezone
-* Unique (Database)
-
-## Usage
+## How to use
 
 ```js
 import {validate} from 'syncano-validator'
@@ -72,3 +48,33 @@ validate(data, rules)
     // Handle errors
   })
 ```
+
+## TODO:
+
+* After (Date)
+* Alpha Dash
+* Before (Date)
+* Between
+* Confirmed
+* Date
+* Date Format
+* Different
+* Dimensions (Image Files)
+* E-Mail
+* File
+* Filled
+* Image (File)
+* In Array
+* IP Address
+* JSON
+* MIME Types
+* MIME Type By File Extension
+* Nullable
+* Not In
+* Present
+* Regular Expression
+* Same
+* Size
+* String
+* Timezone
+* Unique (Database)

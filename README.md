@@ -8,19 +8,19 @@
 
 [xo]: https://github.com/sindresorhus/xo
 [xo-badge]: https://img.shields.io/badge/code_style-XO-5ed9c7.svg
-[circleci]: https://circleci.com/gh/eyedea-io/syncano-validator/tree/devel
-[circleci-badge]: https://circleci.com/gh/eyedea-io/syncano-validator.svg?style=shield&circle-token=4f0733cbf425699a9ca0bc95d44ade178e5a7abd
-[codecov]: https://codecov.io/gh/eyedea-io/syncano-validator
-[codecov-badge]: https://codecov.io/gh/eyedea-io/syncano-validator/branch/master/graph/badge.svg
+[circleci]: https://circleci.com/gh/eyedea-io/syncano-validate/tree/devel
+[circleci-badge]: https://circleci.com/gh/eyedea-io/syncano-validate.svg?style=shield&circle-token=4f0733cbf425699a9ca0bc95d44ade178e5a7abd
+[codecov]: https://codecov.io/gh/eyedea-io/syncano-validate
+[codecov-badge]: https://codecov.io/gh/eyedea-io/syncano-validate/branch/master/graph/badge.svg
 
 ```
-$ npm install syncano-validation
+$ npm install syncano-validate
 ```
 
 ## How to use
 
 ```js
-import {validate} from 'syncano-validator'
+import {validate} from 'syncano-validate'
 
 const data = {
   firstName: 'John',

@@ -1,5 +1,13 @@
-[![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)   [![CircleCI](https://circleci.com/gh/eyedea-io/syncano-validator/tree/master.svg?style=shield)](https://circleci.com/gh/eyedea-io/syncano-validator/tree/master)
-[![codecov](https://codecov.io/gh/eyedea-io/syncano-validator/branch/master/graph/badge.svg)](https://codecov.io/gh/eyedea-io/syncano-validator)
+[![XO code style][xo-badge]][xo]
+[![CircleCI][circleci-badge]][circleci]
+[![codecov][codecov-badge]][codecov]
+
+[xo]: https://github.com/sindresorhus/xo
+[xo-badge]: https://img.shields.io/badge/code_style-XO-5ed9c7.svg
+[circleci]: https://circleci.com/gh/eyedea-io/syncano-validator/tree/devel
+[circleci-badge]: https://circleci.com/gh/eyedea-io/syncano-validator.svg?style=shield&circle-token=4f0733cbf425699a9ca0bc95d44ade178e5a7abd
+[codecov]: https://codecov.io/gh/eyedea-io/syncano-validator
+[codecov-badge]: https://codecov.io/gh/eyedea-io/syncano-validator/branch/master/graph/badge.svg
 
 # syncano-validator
 

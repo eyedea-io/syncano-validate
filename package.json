@@ -39,8 +39,7 @@
       "latest"
     ],
     "plugins": [
-      "transform-object-rest-spread",    "release": "^1.3.3",
-
+      "transform-object-rest-spread",
       "transform-class-properties"
     ]
   },

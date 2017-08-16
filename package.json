@@ -9,9 +9,9 @@
     "dev": "mocha --watch -R min --compilers js:babel-register tests",
     "test": "xo && mocha --compilers js:babel-register tests",
     "test:coverage": "nyc npm test && nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "release:patch": "npm run build && npm version patch -m \"chore: bump version to %s\" && git push --tags && git push && release && npm publish",
-    "release:minor": "npm run build && npm version minor -m \"chore: bump version to %s\" && git push --tags && git push && release && npm publish",
-    "release:major": "npm run build && npm version major -m \"chore: bump version to %s\" && git push --tags && git push && release && npm publish"
+    "release:patch": "npm run build && npm version patch -m \"chore: bump version to %s\" && git push --tags && git push && release",
+    "release:minor": "npm run build && npm version minor -m \"chore: bump version to %s\" && git push --tags && git push && release",
+    "release:major": "npm run build && npm version major -m \"chore: bump version to %s\" && git push --tags && git push && release"
   },
   "xo": {
     "semicolon": false,

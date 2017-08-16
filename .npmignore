@@ -1,0 +1,5 @@
+src
+tests
+codecov.yml
+circle.yml
+.editorconfig

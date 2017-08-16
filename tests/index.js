@@ -1,5 +1,4 @@
 const chai = require('chai')
-const { default: syncano } = require('syncano-server')
 const { default: validator } = require('../src')
 
 const { assert } = chai
@@ -27,6 +26,7 @@ describe('validate function', () => {
   })
 
   it.skip('throws error for invalid connection', () => {
+    const syncano = null
     const invalidValidator = validator.connection(syncano)
 
     const check = err => assert.equal(err.message, 'No such API Key.')

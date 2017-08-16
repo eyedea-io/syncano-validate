@@ -1,4 +1,3 @@
-import { data } from 'syncano-server'
 import { is } from './helpers'
 
 export function validateRequired(attribute, value) {
@@ -32,7 +31,7 @@ export function validateExists(attribute, value, parameters) {
   const [className, column] = parameters
 
   return new Promise((resolve, reject) => {
-    data[className]
+    this.connection[className === 'users' ? 'users' : 'data'][className]
       .where(column, value)
       .list()
       .then(objects => resolve(objects.length > 0))

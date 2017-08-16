@@ -9,9 +9,9 @@
     "dev": "mocha --watch -R min --compilers js:babel-register tests",
     "test": "xo && mocha --compilers js:babel-register tests",
     "test:coverage": "nyc npm test && nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "release:patch": "npm version patch -m \"chore: bump version to %s\" && git push --tags && git push && release",
-    "release:minor": "npm version minor -m \"chore: bump version to %s\" && git push --tags && git push && release",
-    "release:major": "npm version major -m \"chore: bump version to %s\" && git push --tags && git push && release"
+    "release:patch": "npm run build && npm version patch -m \"chore: bump version to %s\" && git push --tags && git push && release && npm publish",
+    "release:minor": "npm run build && npm version minor -m \"chore: bump version to %s\" && git push --tags && git push && release && npm publish",
+    "release:major": "npm run build && npm version major -m \"chore: bump version to %s\" && git push --tags && git push && release && npm publish"
   },
   "xo": {
     "semicolon": false,
@@ -36,7 +36,7 @@
   },
   "babel": {
     "presets": [
-      "latest"
+      "env"
     ],
     "plugins": [
       "transform-object-rest-spread",
@@ -45,18 +45,18 @@
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
-    "babel-plugin-transform-class-properties": "^6.19.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
-    "babel-preset-latest": "^6.24.1",
     "babel-register": "^6.24.1",
     "chai": "^3.5.0",
     "codecov": "^2.0.1",
-    "release": "^1.3.3",
     "mocha": "^3.5.0",
     "nyc": "^11.0.0",
+    "release": "^1.4.3",
     "xo": "^0.18.0"
   },
   "dependencies": {
+    "babel-preset-env": "^1.6.0",
     "is_js": "^0.9.0",
     "lodash.camelcase": "^4.3.0",
     "lodash.snakecase": "^4.1.1",

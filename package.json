@@ -1,6 +1,6 @@
 {
   "name": "syncano-validate",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "",
   "license": "MIT",
   "main": "lib/index.js",

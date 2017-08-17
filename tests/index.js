@@ -697,4 +697,35 @@ describe('rule', () => {
       return validate(data, rules).then(check).catch(check)
     })
   })
+
+  /*
+   * Regular Expression
+   * ----------------------------------------------------- */
+  describe('#regular_expression', () => {
+    it('throws error when an attribute does not match to the format', () => {
+      const data = { phoneNumber: '555s-666-222' }
+      const rules = { phoneNumber: 'regex:[0-9]{3} ?-?[0-9]{3} ?-?[0-9]{3}' }
+      const check = err => assert.equal(err.phoneNumber,
+        'The phone number must match to the format.'
+      )
+
+      return validate(data, rules).then(check).catch(check)
+    })
+
+    it('passes without parameter', () => {
+      const data = { phoneNumber: '555-666-222' }
+      const rules = { phoneNumber: 'regex' }
+      const check = err => assert.isUndefined(err.text)
+
+      return validate(data, rules).then(check).catch(check)
+    })
+
+    it('passes when parameter is not valid regex', () => {
+      const data = { phoneNumber: '555-666-222' }
+      const rules = { phoneNumber: 'regex:foo([/' }
+      const check = err => assert.isUndefined(err.text)
+
+      return validate(data, rules).then(check).catch(check)
+    })
+  })
 })

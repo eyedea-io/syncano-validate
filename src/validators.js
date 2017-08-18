@@ -102,7 +102,7 @@ export function validateRegex(attribute, value, parameters) {
   if (is.not.string(value) && is.not.number(value)) {
     return false
   }
-  const regex = parameters[0] ? new RegExp(`${parameters[0]}`) : undefined
+  const regex = new RegExp(`${parameters[0]}`)
 
   return regex ? regex.test(value) : true
 }

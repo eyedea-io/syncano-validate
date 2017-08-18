@@ -39,7 +39,7 @@ const rules = {
   email: 'required|email',
   age: 'required|numeric|min:18',
   gender: 'in:male,female',
-  phoneNumber: 'regex:[0-9]{3} ?-?[0-9]{3} ?-?[0-9]{3}'
+  phoneNumber: 'regex:[0-9]{3}?-?[0-9]{3}?-?[0-9]{3}'
 }
 
 validate(data, rules)

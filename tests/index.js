@@ -704,9 +704,29 @@ describe('rule', () => {
   describe('#regular_expression', () => {
     it('throws error when an attribute does not match to the format', () => {
       const data = { phoneNumber: '555s-666-222' }
-      const rules = { phoneNumber: 'regex:[0-9]{3} ?-?[0-9]{3} ?-?[0-9]{3}' }
+      const rules = { phoneNumber: 'regex:[0-9]{3}?-?[0-9]{3}?-?[0-9]{3}' }
       const check = err => assert.equal(err.phoneNumber,
-        'The phone number must match to the format.'
+        'The phone number format is invalid.'
+      )
+
+      return validate(data, rules).then(check).catch(check)
+    })
+
+    it('throws error when parrameter is not a string or number', () => {
+      const data = { phoneNumber: {} }
+      const rules = { phoneNumber: 'regex:[0-9]{3}?-?[0-9]{3}?-?[0-9]{3}' }
+      const check = err => assert.equal(err.phoneNumber,
+        'The phone number format is invalid.'
+      )
+
+      return validate(data, rules).then(check).catch(check)
+    })
+
+    it('throws error when more than one parrameters given', () => {
+      const data = { phoneNumber: {} }
+      const rules = { phoneNumber: 'regex:[0-9]{3}?-?[0-9]{3}?-?[0-9]{3},secondParameter' }
+      const check = err => assert.equal(err.phoneNumber,
+        'The phone number format is invalid.'
       )
 
       return validate(data, rules).then(check).catch(check)

@@ -97,6 +97,11 @@ export function validateAlphaNum(attribute, value) {
 }
 
 export function validateRegex(attribute, value, parameters) {
+  this.requireParameterCount(1, parameters, 'regex')
+
+  if (is.not.string(value) && is.not.number(value)) {
+    return false
+  }
   const regex = parameters[0] ? new RegExp(`${parameters[0]}`) : undefined
 
   return regex ? regex.test(value) : true

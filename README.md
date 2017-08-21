@@ -28,7 +28,8 @@ const data = {
   username: 'john.doe'
   email: 'john.doe@example.com',
   age: 43,
-  gender: 'male'
+  gender: 'male',
+  phoneNumber: '555-444-333'
 }
 
 const rules = {
@@ -37,7 +38,8 @@ const rules = {
   username: 'required|unique:users,username',
   email: 'required|email',
   age: 'required|numeric|min:18',
-  gender: 'in:male,female'
+  gender: 'in:male,female',
+  phoneNumber: 'regex:[0-9]{3}?-?[0-9]{3}?-?[0-9]{3}'
 }
 
 validate(data, rules)
@@ -72,7 +74,6 @@ validate(data, rules)
 * Nullable
 * Not In
 * Present
-* Regular Expression
 * Same
 * Size
 * String

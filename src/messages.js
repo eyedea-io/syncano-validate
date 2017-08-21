@@ -20,5 +20,6 @@ export default {
   integer: 'The :attribute must be an integer.',
   accepted: 'The :attribute must be accepted.',
   alpha: 'The :attribute may only contain letters.',
-  alpha_num: 'The :attribute may only contain letters and numbers.'
+  alpha_num: 'The :attribute may only contain letters and numbers.',
+  regex: 'The :attribute format is invalid.'
 }

@@ -95,3 +95,14 @@ export function validateAlpha(attribute, value) {
 export function validateAlphaNum(attribute, value) {
   return (typeof value === 'string' || typeof value === 'number') && is.alphaNumeric(value)
 }
+
+export function validateRegex(attribute, value, parameters) {
+  this.requireParameterCount(1, parameters, 'regex')
+
+  if (is.not.string(value) && is.not.number(value)) {
+    return false
+  }
+  const regex = new RegExp(`${parameters[0]}`)
+
+  return regex ? regex.test(value) : true
+}

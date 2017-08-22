@@ -29,7 +29,8 @@ const data = {
   email: 'john.doe@example.com',
   age: 43,
   gender: 'male',
-  phoneNumber: '555-444-333'
+  phoneNumber: '555-444-333',
+  birthDate: '08/25/2017'
 }
 
 const rules = {
@@ -39,7 +40,8 @@ const rules = {
   email: 'required|email',
   age: 'required|numeric|min:18',
   gender: 'in:male,female',
-  phoneNumber: 'regex:[0-9]{3}?-?[0-9]{3}?-?[0-9]{3}'
+  phoneNumber: 'regex:[0-9]{3}?-?[0-9]{3}?-?[0-9]{3}',
+  birthDate: 'date'
 }
 
 validate(data, rules)
@@ -58,7 +60,6 @@ validate(data, rules)
 * Before (Date)
 * Between
 * Confirmed
-* Date
 * Date Format
 * Different
 * Dimensions (Image Files)

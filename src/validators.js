@@ -106,3 +106,17 @@ export function validateRegex(attribute, value, parameters) {
 
   return regex ? regex.test(value) : true
 }
+
+export function validateDate(attribute, value) {
+  if (is.date(value)) {
+    return true
+  }
+
+  if (is.not.string(value) && is.not.number(value)) {
+    return false
+  }
+
+  const date = new Date(value)
+
+  return !!(date.getMonth() + 1)
+}

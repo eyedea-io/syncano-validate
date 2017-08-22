@@ -63,7 +63,6 @@ validate(data, rules)
 * Date Format
 * Different
 * Dimensions (Image Files)
-* E-Mail
 * File
 * Filled
 * Image (File)

@@ -735,7 +735,7 @@ describe('rule', () => {
     it('passes without parameter', () => {
       const data = { phoneNumber: '555-666-222' }
       const rules = { phoneNumber: 'regex' }
-      const check = err => assert.isUndefined(err.text)
+      const check = err => assert.isUndefined(err.phoneNumber)
 
       return validate(data, rules).then(check).catch(check)
     })
@@ -743,7 +743,48 @@ describe('rule', () => {
     it('passes when parameter is not valid regex', () => {
       const data = { phoneNumber: '555-666-222' }
       const rules = { phoneNumber: 'regex:foo([/' }
-      const check = err => assert.isUndefined(err.text)
+      const check = err => assert.isUndefined(err.phoneNumber)
+
+      return validate(data, rules).then(check).catch(check)
+    })
+  })
+
+  it('passes when an attribute match to the format', () => {
+    const data = { phoneNumber: '555-666-222' }
+    const rules = { phoneNumber: 'regex:[0-9]{3}?-?[0-9]{3}?-?[0-9]{3}' }
+    const check = err => assert.isUndefined(err.phoneNumber)
+
+    return validate(data, rules).then(check).catch(check)
+  })
+
+  /*
+   * Email
+   * ----------------------------------------------------- */
+  describe('#email', () => {
+    it('throws error when an attribute does not match to the email format', () => {
+      const data = { email: 'test123.com' }
+      const rules = { email: 'email' }
+      const check = err => assert.equal(err.email,
+        'The email must be a valid email address.'
+      )
+
+      return validate(data, rules).then(check).catch(check)
+    })
+
+    it('throws error when parrameter is not a string or number', () => {
+      const data = { email: {} }
+      const rules = { email: 'email' }
+      const check = err => assert.equal(err.email,
+        'The email must be a valid email address.'
+      )
+
+      return validate(data, rules).then(check).catch(check)
+    })
+
+    it('passes when an attribute match to the email format', () => {
+      const data = { email: 'test@test.com' }
+      const rules = { email: 'email' }
+      const check = err => assert.isUndefined(err.email)
 
       return validate(data, rules).then(check).catch(check)
     })

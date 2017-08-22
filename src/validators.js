@@ -120,3 +120,11 @@ export function validateDate(attribute, value) {
 
   return Boolean(date.getMonth() + 1)
 }
+
+export function validateEmail(attribute, value) {
+  if (is.not.string(value) && is.not.number(value)) {
+    return false
+  }
+
+  return is.email(value)
+}

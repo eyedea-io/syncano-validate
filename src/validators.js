@@ -118,5 +118,5 @@ export function validateDate(attribute, value) {
 
   const date = new Date(value)
 
-  return !!(date.getMonth() + 1)
+  return Boolean(date.getMonth() + 1)
 }

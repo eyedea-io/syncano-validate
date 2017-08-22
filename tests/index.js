@@ -789,4 +789,53 @@ describe('rule', () => {
       return validate(data, rules).then(check).catch(check)
     })
   })
+
+  /*
+   * Date
+   * ----------------------------------------------------- */
+  describe('#date', () => {
+    it('throws error when an attribute is not a date format', () => {
+      const data = { date: 'testDate' }
+      const rules = { date: 'date' }
+      const check = err => assert.equal(err.date,
+        'The date is not a valid date.'
+      )
+
+      return validate(data, rules).then(check).catch(check)
+    })
+
+    it('throws error when parrameter is not a string or number', () => {
+      const data = { date: {} }
+      const rules = { date: 'date' }
+      const check = err => assert.equal(err.date,
+        'The date is not a valid date.'
+      )
+
+      return validate(data, rules).then(check).catch(check)
+    })
+
+    it('passes when an attribute is in Date typeof', () => {
+      const data = { date: new Date() }
+      const rules = { date: 'date' }
+      const check = err => assert.isUndefined(err.date)
+
+      return validate(data, rules).then(check).catch(check)
+    })
+
+    it('passes when an attribute is a timestamp', () => {
+      const data = { date: Date.now() }
+      const rules = { date: 'date' }
+      const check = err => assert.isUndefined(err.date)
+
+      return validate(data, rules).then(check).catch(check)
+    })
+
+    it('passes when an attribute is a dateString', () => {
+      const data = { date: '08/25/2017' }
+      const rules = { date: 'date' }
+      const check = err => assert.isUndefined(err.date)
+
+      return validate(data, rules).then(check).catch(check)
+    })
+  })
 })

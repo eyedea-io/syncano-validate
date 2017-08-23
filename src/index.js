@@ -18,10 +18,16 @@ class Validator {
 
   setRules(rules) {
     // Map attribute to array of rules
-    this.rules = Object.keys(rules).reduce((all, attribute) => ({
-      ...all,
-      [attribute]: this.parseRules(rules[attribute])
-    }), {})
+    this.rules = Object.keys(rules).reduce((all, attribute) => {
+      if (attribute.indexOf('*') >= 0) {
+        this.wildcards.push(attribute.split('.')[0])
+      }
+
+      return {
+        ...all,
+        [attribute.split('.')[0]]: this.parseRules(rules[attribute])
+      }
+    }, {})
   }
 
   parseRules(rules) {
@@ -57,7 +63,10 @@ class Validator {
       rule === 'Bool' ? 'Boolean' : rule
   }
 
-  validate(data = {}, rules = {}) {
+  validate(data = {}, rules = {}, messages = {}) {
+    this.customMessages = messages
+    this.wildcards = []
+
     return new Promise((resolve, reject) => {
       try {
         this.setData(data)
@@ -95,17 +104,34 @@ class Validator {
     return rulesToResolve
   }
 
+  isWildcard(attribute) {
+    return this.wildcards.indexOf(attribute) >= 0
+  }
+
   validateAttribute(attribute, { rule, parameters }) {
     // TODO: Handle file input
-    const value = this.data[attribute]
     const method = validators[`validate${rule}`]
 
     if (method) {
-      const passed = method.call(this, attribute, value, parameters)
+      const value = this.data[attribute]
+      let passed
+
+      if (this.isWildcard(attribute)) {
+        passed = value
+          .map(item => method.call(this, attribute, item, parameters))
+      } else {
+        passed = method.call(this, attribute, value, parameters)
+      }
 
       if (passed instanceof Promise) {
         passed.then(result => {
           if (!result) {
+            this.addError(attribute, rule, parameters)
+          }
+        })
+      } else if (Array.isArray(passed)) {
+        passed.forEach(item => {
+          if (item === false) {
             this.addError(attribute, rule, parameters)
           }
         })
@@ -137,7 +163,26 @@ class Validator {
       message = message[type]
     }
 
-    return message
+    const customMessage = this.getCustomMessage(attribute, rule)
+
+    return customMessage || message
+  }
+
+  getCustomMessage(attribute, rule) {
+    const lowerRule = snakeCase(rule)
+
+    attribute = this.isWildcard(attribute) ? `${attribute}.*` : attribute
+
+    if (
+      this.customMessages[attribute] &&
+      this.customMessages[attribute][lowerRule]
+    ) {
+      return this.customMessages[attribute][lowerRule]
+    } else if (this.customMessages[`${attribute}.${lowerRule}`]) {
+      return this.customMessages[`${attribute}.${lowerRule}`]
+    } else if (this.customMessages[lowerRule]) {
+      return this.customMessages[lowerRule]
+    }
   }
 
   hasRule(attribute, rules) {

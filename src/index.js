@@ -173,8 +173,6 @@ class Validator {
 
     attribute = this.isWildcard(attribute) ? `${attribute}.*` : attribute
 
-    console.log(this.customMEssages, attribute, lowerRule)
-
     if (
       this.customMessages[attribute] &&
       this.customMessages[attribute][lowerRule]

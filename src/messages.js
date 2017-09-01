@@ -22,5 +22,7 @@ export default {
   accepted: 'The :attribute must be accepted.',
   alpha: 'The :attribute may only contain letters.',
   alpha_num: 'The :attribute may only contain letters and numbers.',
-  regex: 'The :attribute format is invalid.'
+  regex: 'The :attribute format is invalid.',
+  date: 'The :attribute is not a valid date.',
+  email: 'The :attribute must be a valid email address.'
 }

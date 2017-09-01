@@ -4,7 +4,7 @@ export default () => {
   const data = {
     firstName: '',
     lastName: 'Doe',
-    age: [16, 24],
+    age: [18, undefined, 5],
     gender: 'male'
   }
 

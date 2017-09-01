@@ -130,9 +130,9 @@ class Validator {
           }
         })
       } else if (Array.isArray(passed)) {
-        passed.forEach(item => {
+        passed.forEach((item, i) => {
           if (item === false) {
-            this.addError(attribute, rule, parameters)
+            this.addError(`${attribute}.${i}`, rule, parameters)
           }
         })
       } else if (!passed) {
@@ -144,11 +144,17 @@ class Validator {
   }
 
   addError(attribute, rule, parameters) {
+    const [attr, i] = attribute.split('.')
     let message = this.getMessage(attribute, rule)
 
-    message = this.doReplacements(message, attribute, rule, parameters)
+    message = this.doReplacements(message, attr, rule, parameters)
 
-    this.errors[attribute] = message
+    if (i) {
+      this.errors[attr] = this.errors[attr] || []
+      this.errors[attr][i] = message
+    } else {
+      this.errors[attr] = message
+    }
   }
 
   getMessage(attribute, rule) {

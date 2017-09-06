@@ -105,7 +105,7 @@ class Validator {
   }
 
   isWildcard(attribute) {
-    return this.wildcards.indexOf(attribute) >= 0
+    return this.wildcards.indexOf(attribute.split('.')[0]) >= 0
   }
 
   validateAttribute(attribute, { rule, parameters }) {
@@ -177,7 +177,7 @@ class Validator {
   getCustomMessage(attribute, rule) {
     const lowerRule = snakeCase(rule)
 
-    attribute = this.isWildcard(attribute) ? `${attribute}.*` : attribute
+    attribute = this.isWildcard(attribute) ? `${attribute.split('.')[0]}.*` : attribute
 
     if (
       this.customMessages[attribute] &&
@@ -196,6 +196,8 @@ class Validator {
   }
 
   getRule(attribute, rules) {
+    attribute = attribute.split('.')[0]
+
     for (const { rule, parameters } of this.rules[attribute]) {
       if (rules.indexOf(rule) >= 0) {
         return [rule, parameters]
@@ -205,7 +207,7 @@ class Validator {
 
   doReplacements(message, attribute, rule, parameters) {
     const replacer = replacers[`replace${rule}`]
-    const formatedAttribute = snakeCase(attribute).replace('_', ' ')
+    const formatedAttribute = snakeCase(attribute).replace('_', '   ')
 
     message = message.replace(':attribute', formatedAttribute)
 
